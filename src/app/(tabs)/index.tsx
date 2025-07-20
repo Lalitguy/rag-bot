@@ -48,11 +48,16 @@ const TabOneScreen = () => {
   }, [rag.isReady]);
 
   if (rag.error) {
-    console.log(rag.error);
+    console.log("rag error", rag.error);
     return <Text>{rag.error}</Text>;
   }
 
+  // useEffect(() => {
+  //   console.log(rag);
+  // }, [rag]);
+
   if (!rag.isReady) {
+    console.log(rag);
     return <Text>Loading...</Text>;
   }
   return (
