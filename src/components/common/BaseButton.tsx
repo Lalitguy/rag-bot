@@ -1,0 +1,53 @@
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+  ViewStyle,
+} from "react-native";
+import React from "react";
+import BaseText from "./BaseText";
+import { COLORS } from "@/src/constants/colors";
+
+interface BaseButtonProps {
+  text?: string;
+  onPress?: () => void;
+  customComponent?: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
+}
+
+const BaseButton = ({
+  text,
+  onPress,
+  customComponent,
+  style = {},
+  textStyle = {},
+}: BaseButtonProps) => {
+  return (
+    <Pressable onPress={onPress} style={[styles.baseStyles, style]}>
+      {customComponent
+        ? customComponent
+        : text && (
+            <BaseText text={text} style={[styles.textStyles, textStyle]} />
+          )}
+    </Pressable>
+  );
+};
+
+const styles = StyleSheet.create({
+  baseStyles: {
+    borderRadius: 24,
+    overflow: "hidden",
+    backgroundColor: COLORS.white,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    width: "80%",
+  },
+  textStyles: {
+    textAlign: "center",
+    color: COLORS.black,
+  },
+});
+
+export default BaseButton;
