@@ -20,6 +20,7 @@ const TabLayout = () => {
           fontSize: 10,
         },
         tabBarActiveTintColor: COLORS.white,
+        tabBarInactiveTintColor: COLORS.lightGray,
         headerStyle: {
           backgroundColor: COLORS.dark,
         },
@@ -48,7 +49,7 @@ const TabLayout = () => {
         name="knowledge-base"
         options={{
           title: "Add to knowledge base",
-          tabBarLabel: "Knowledge",
+          tabBarLabel: "Resources",
           tabBarIcon: ({ focused }) => (
             <MaterialIcons
               name="library-books"

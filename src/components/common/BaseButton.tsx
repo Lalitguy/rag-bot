@@ -26,11 +26,8 @@ const BaseButton = ({
 }: BaseButtonProps) => {
   return (
     <Pressable onPress={onPress} style={[styles.baseStyles, style]}>
-      {customComponent
-        ? customComponent
-        : text && (
-            <BaseText text={text} style={[styles.textStyles, textStyle]} />
-          )}
+      {customComponent ? customComponent : null}
+      {text && <BaseText text={text} style={[styles.textStyles, textStyle]} />}
     </Pressable>
   );
 };
@@ -43,6 +40,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     width: "80%",
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: 8,
   },
   textStyles: {
     textAlign: "center",
