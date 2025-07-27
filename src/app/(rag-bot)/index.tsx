@@ -1,11 +1,14 @@
 import { View, Text } from "react-native";
 import React from "react";
+import Container from "@/src/components/common/Container";
+import BaseText from "@/src/components/common/BaseText";
+import { STYLES } from "@/src/constants/styles";
 
 const RagBot = () => {
   return (
-    <View>
-      <Text>RagBotRoot</Text>
-    </View>
+    <Container style={STYLES.justifyEnd}>
+      <BaseText text="Rag Bot" />
+    </Container>
   );
 };
 

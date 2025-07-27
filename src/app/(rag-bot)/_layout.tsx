@@ -1,19 +1,45 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { COLORS } from "@/src/constants/colors";
 
 const TabLayout = () => {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: COLORS.dark,
+          paddingTop: 2,
+          height: 56,
+          borderTopWidth: 0,
+        },
+        tabBarLabelStyle: {
+          fontFamily: "Nunito-Semi",
+          letterSpacing: 0.9,
+          fontSize: 10,
+        },
+        tabBarActiveTintColor: COLORS.white,
+        headerStyle: {
+          backgroundColor: COLORS.dark,
+        },
+        headerTitleStyle: {
+          color: COLORS.white,
+          fontFamily: "Nunito-Semi",
+          width: "100%",
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Menu",
+          title: "Ask the Assistant",
+          tabBarLabel: "Assistant",
           tabBarIcon: ({ focused }) => (
-            <MaterialIcons
-              name="menu"
+            <MaterialCommunityIcons
+              name="assistant"
               size={24}
-              color={focused ? "#bbb" : "#eee"}
+              color={focused ? COLORS.white : COLORS.gray}
             />
           ),
         }}
@@ -21,12 +47,13 @@ const TabLayout = () => {
       <Tabs.Screen
         name="knowledge-base"
         options={{
-          title: "Menu",
+          title: "Add to knowledge base",
+          tabBarLabel: "Knowledge",
           tabBarIcon: ({ focused }) => (
             <MaterialIcons
-              name="menu"
+              name="library-books"
               size={24}
-              color={focused ? "#bbb" : "#eee"}
+              color={focused ? COLORS.white : COLORS.gray}
             />
           ),
         }}

@@ -4,4 +4,7 @@ export const STYLES = StyleSheet.create({
   centerSelf: {
     alignSelf: "center",
   },
+  justifyEnd: {
+    justifyContent: "flex-end",
+  },
 });

@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
   baseStyles: {
     fontSize: 14,
     color: COLORS.white,
+    fontFamily: "Nunito",
   },
 });
 

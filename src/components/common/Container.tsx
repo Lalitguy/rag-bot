@@ -1,14 +1,17 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import React, { PropsWithChildren } from "react";
 import { COLORS } from "@/src/constants/colors";
 
 interface ContainerProps {
   children: React.ReactNode;
   centered?: boolean;
+  style?: StyleProp<ViewStyle>;
 }
-const Container = ({ children, centered }: ContainerProps) => {
+const Container = ({ children, centered, style = {} }: ContainerProps) => {
   return (
-    <View style={[styles.containerStyles, centered ? styles.centered : {}]}>
+    <View
+      style={[styles.containerStyles, style, centered ? styles.centered : {}]}
+    >
       {children}
     </View>
   );
@@ -17,9 +20,8 @@ const Container = ({ children, centered }: ContainerProps) => {
 const styles = StyleSheet.create({
   containerStyles: {
     flex: 1,
-    backgroundColor: COLORS.dark,
-    paddingVertical: 16,
-    paddingHorizontal: 12,
+    backgroundColor: COLORS.darkTertiary,
+    padding: 12,
   },
   centered: {
     justifyContent: "center",

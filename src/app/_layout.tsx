@@ -9,8 +9,8 @@ const Root = () => {
     <SafeAreaProvider>
       <StatusBar barStyle={"light-content"} backgroundColor={COLORS.dark} />
       <SafeAreaView style={{ flex: 1 }}>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
         </Stack>
       </SafeAreaView>
     </SafeAreaProvider>
