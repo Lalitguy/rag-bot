@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.white,
     fontFamily: "Nunito",
+    includeFontPadding: false,
   },
 });
 

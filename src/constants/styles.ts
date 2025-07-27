@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "./colors";
 
 export const STYLES = StyleSheet.create({
   centerSelf: {
@@ -9,5 +10,13 @@ export const STYLES = StyleSheet.create({
   },
   flex: {
     flex: 1,
+  },
+  textBold: {
+    fontFamily: "Nunito-Bold",
+  },
+  error: {
+    color: COLORS.error,
+    fontSize: 12,
+    fontFamily: "Nunito",
   },
 });

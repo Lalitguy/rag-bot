@@ -1,13 +1,13 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleProp,
-  TextStyle,
-  StyleSheet,
-} from "react-native";
-import React, { useMemo, useState } from "react";
 import { COLORS } from "@/src/constants/colors";
+import { STYLES } from "@/src/constants/styles";
+import React, { useMemo } from "react";
+import {
+  StyleProp,
+  StyleSheet,
+  TextInput,
+  TextStyle,
+  View,
+} from "react-native";
 import BaseText from "./BaseText";
 
 interface Props {
@@ -17,8 +17,15 @@ interface Props {
   onChangeText?: (text: string) => void;
   label?: string;
   numberOfLines?: number;
+  error?: string;
 }
-const BaseInput = ({ style, label, numberOfLines = 1, ...props }: Props) => {
+const BaseInput = ({
+  style,
+  label,
+  numberOfLines = 1,
+  error,
+  ...props
+}: Props) => {
   const heightStyle = useMemo(() => {
     return {
       minHeight: 14 * numberOfLines + 28,
@@ -28,6 +35,7 @@ const BaseInput = ({ style, label, numberOfLines = 1, ...props }: Props) => {
   return (
     <View style={styles.groupWrap}>
       {label && <BaseText text={label} style={styles.labelStyle} />}
+      {error && <BaseText text={error} style={STYLES.error} />}
       <TextInput
         style={[styles.baseStyles, style, heightStyle]}
         multiline={numberOfLines > 1}
@@ -43,13 +51,13 @@ const BaseInput = ({ style, label, numberOfLines = 1, ...props }: Props) => {
 
 const styles = StyleSheet.create({
   groupWrap: {
-    gap: 8,
+    gap: 6,
     marginBottom: 20,
   },
   baseStyles: {
     backgroundColor: COLORS.darkTertiary,
     paddingHorizontal: 12,
-    borderRadius: 8,
+    borderRadius: 10,
     fontSize: 14,
     color: COLORS.white,
     fontFamily: "Nunito",
