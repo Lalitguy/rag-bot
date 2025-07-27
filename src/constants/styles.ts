@@ -14,6 +14,9 @@ export const STYLES = StyleSheet.create({
   textBold: {
     fontFamily: "Nunito-Bold",
   },
+  textSemiBold: {
+    fontFamily: "Nunito-Semi",
+  },
   error: {
     color: COLORS.error,
     fontSize: 12,

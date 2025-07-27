@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   baseStyles: {
     backgroundColor: COLORS.darkTertiary,
     paddingHorizontal: 12,
-    borderRadius: 10,
+    borderRadius: 12,
     fontSize: 14,
     color: COLORS.white,
     fontFamily: "Nunito",

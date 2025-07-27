@@ -11,6 +11,7 @@ import BaseInput from "../common/BaseInput";
 import { defaultKnowledgeForm } from "@/src/constants/defaults";
 import { KnowledgeFormData } from "@/src/types";
 import { isValidUrl } from "@/src/utils";
+import { useKnowledgeAdd } from "@/src/api/knowledge";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const placeholderTitles = [
@@ -27,6 +28,8 @@ const KnowledgeForm = () => {
 
   const [form, setForm] = useState(defaultKnowledgeForm);
   const [formErrors, setFormErrors] = useState(defaultKnowledgeForm);
+
+  const { mutate: insertKnowledge } = useKnowledgeAdd();
 
   const handleChange = (val: string, key: keyof KnowledgeFormData) => {
     setForm((prev) => ({ ...prev, [key]: val }));
@@ -58,6 +61,8 @@ const KnowledgeForm = () => {
     }
 
     if (hasError) return;
+
+    insertKnowledge(form);
   };
 
   return (
