@@ -20,7 +20,7 @@ const Container = ({ children, centered, style = {} }: ContainerProps) => {
 const styles = StyleSheet.create({
   containerStyles: {
     flex: 1,
-    backgroundColor: COLORS.darkTertiary,
+    backgroundColor: COLORS.darkSecondary,
     padding: 12,
   },
   centered: {

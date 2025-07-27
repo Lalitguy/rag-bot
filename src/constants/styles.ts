@@ -7,4 +7,7 @@ export const STYLES = StyleSheet.create({
   justifyEnd: {
     justifyContent: "flex-end",
   },
+  flex: {
+    flex: 1,
+  },
 });

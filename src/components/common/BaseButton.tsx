@@ -3,6 +3,7 @@ import {
   StyleProp,
   StyleSheet,
   TextStyle,
+  TouchableOpacity,
   ViewStyle,
 } from "react-native";
 import React from "react";
@@ -25,10 +26,10 @@ const BaseButton = ({
   textStyle = {},
 }: BaseButtonProps) => {
   return (
-    <Pressable onPress={onPress} style={[styles.baseStyles, style]}>
+    <TouchableOpacity onPress={onPress} style={[styles.baseStyles, style]}>
       {customComponent ? customComponent : null}
       {text && <BaseText text={text} style={[styles.textStyles, textStyle]} />}
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
