@@ -10,6 +10,7 @@ export const STYLES = StyleSheet.create({
   },
   flex: {
     flex: 1,
+    position: "relative",
   },
   textBold: {
     fontFamily: "Nunito-Bold",
@@ -21,5 +22,8 @@ export const STYLES = StyleSheet.create({
     color: COLORS.error,
     fontSize: 12,
     fontFamily: "Nunito",
+  },
+  flexRow: {
+    flexDirection: "row",
   },
 });

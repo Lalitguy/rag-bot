@@ -18,12 +18,17 @@ interface Props {
   label?: string;
   numberOfLines?: number;
   error?: string;
+  autoHeight?: boolean;
+  bottomSpacing?: boolean;
 }
+
 const BaseInput = ({
   style,
   label,
   numberOfLines = 1,
   error,
+  autoHeight = true,
+  bottomSpacing = true,
   ...props
 }: Props) => {
   const heightStyle = useMemo(() => {
@@ -33,11 +38,11 @@ const BaseInput = ({
     };
   }, [numberOfLines]);
   return (
-    <View style={styles.groupWrap}>
+    <View style={[styles.groupWrap, bottomSpacing ? styles.bottomSpacing : {}]}>
       {label && <BaseText text={label} style={styles.labelStyle} />}
       {error && <BaseText text={error} style={STYLES.error} />}
       <TextInput
-        style={[styles.baseStyles, style, heightStyle]}
+        style={[styles.baseStyles, style, autoHeight ? heightStyle : {}]}
         multiline={numberOfLines > 1}
         placeholderTextColor={COLORS.gray}
         textAlignVertical="top"
@@ -52,6 +57,9 @@ const BaseInput = ({
 const styles = StyleSheet.create({
   groupWrap: {
     gap: 6,
+    flex: 1,
+  },
+  bottomSpacing: {
     marginBottom: 20,
   },
   baseStyles: {

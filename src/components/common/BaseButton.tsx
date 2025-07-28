@@ -16,6 +16,7 @@ interface BaseButtonProps {
   customComponent?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  disabled?: boolean;
 }
 
 const BaseButton = ({
@@ -24,9 +25,14 @@ const BaseButton = ({
   customComponent,
   style = {},
   textStyle = {},
+  disabled = false,
 }: BaseButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.baseStyles, style]}>
+    <TouchableOpacity
+      disabled={disabled}
+      onPress={onPress}
+      style={[styles.baseStyles, style, disabled ? styles.disabled : {}]}
+    >
       {customComponent ? customComponent : null}
       {text && <BaseText text={text} style={[styles.textStyles, textStyle]} />}
     </TouchableOpacity>
@@ -48,6 +54,9 @@ const styles = StyleSheet.create({
   textStyles: {
     textAlign: "center",
     color: COLORS.black,
+  },
+  disabled: {
+    opacity: 0.8,
   },
 });
 

@@ -6,11 +6,22 @@ interface ContainerProps {
   children: React.ReactNode;
   centered?: boolean;
   style?: StyleProp<ViewStyle>;
+  noPadding?: boolean;
 }
-const Container = ({ children, centered, style = {} }: ContainerProps) => {
+const Container = ({
+  children,
+  centered,
+  style = {},
+  noPadding = false,
+}: ContainerProps) => {
   return (
     <View
-      style={[styles.containerStyles, style, centered ? styles.centered : {}]}
+      style={[
+        styles.containerStyles,
+        style,
+        centered ? styles.centered : {},
+        noPadding ? {} : styles.paddingStyles,
+      ]}
     >
       {children}
     </View>
@@ -21,11 +32,13 @@ const styles = StyleSheet.create({
   containerStyles: {
     flex: 1,
     backgroundColor: COLORS.darkSecondary,
-    padding: 12,
   },
   centered: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  paddingStyles: {
+    padding: 12,
   },
 });
 export default Container;

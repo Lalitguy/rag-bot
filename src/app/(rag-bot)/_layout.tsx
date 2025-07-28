@@ -39,7 +39,7 @@ const TabLayout = () => {
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
               name="assistant"
-              size={24}
+              size={22}
               color={focused ? COLORS.white : COLORS.gray}
             />
           ),
@@ -53,7 +53,7 @@ const TabLayout = () => {
           tabBarIcon: ({ focused }) => (
             <MaterialIcons
               name="library-books"
-              size={24}
+              size={22}
               color={focused ? COLORS.white : COLORS.gray}
             />
           ),
