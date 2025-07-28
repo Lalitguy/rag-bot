@@ -1,10 +1,12 @@
 import { STYLES } from "@/src/constants/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
+  Keyboard,
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
+  View,
 } from "react-native";
 import BaseButton from "../common/BaseButton";
 import BaseInput from "../common/BaseInput";
@@ -28,8 +30,9 @@ const KnowledgeForm = () => {
 
   const [form, setForm] = useState(defaultKnowledgeForm);
   const [formErrors, setFormErrors] = useState(defaultKnowledgeForm);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
-  const { mutate: insertKnowledge } = useKnowledgeAdd();
+  const { mutate: insertKnowledge, isPending } = useKnowledgeAdd();
 
   const handleChange = (val: string, key: keyof KnowledgeFormData) => {
     setForm((prev) => ({ ...prev, [key]: val }));
@@ -65,44 +68,78 @@ const KnowledgeForm = () => {
     insertKnowledge(form);
   };
 
+  useEffect(() => {
+    if (Object.entries(formErrors).every(([key, value]) => !value)) {
+      setButtonDisabled(true);
+    }
+  }, [form]);
+
+  const loading = isPending || buttonDisabled;
+
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setKeyboardVisible(true); // Keyboard is visible
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false); // Keyboard is hidden
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   return (
-    <KeyboardAvoidingView style={STYLES.flex}>
-      <ScrollView
-        keyboardDismissMode="on-drag"
-        keyboardShouldPersistTaps="handled"
-      >
-        <BaseInput
-          label="Title"
-          placeholder={placeholder}
-          numberOfLines={1}
-          value={form.title}
-          onChangeText={(val) => handleChange(val, "title")}
-          error={formErrors.title}
+    <View style={STYLES.flex}>
+      <KeyboardAvoidingView style={STYLES.flex}>
+        <ScrollView
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+        >
+          <BaseInput
+            label="Title"
+            placeholder={placeholder}
+            numberOfLines={1}
+            value={form.title}
+            onChangeText={(val) => handleChange(val, "title")}
+            error={formErrors.title}
+          />
+          <BaseInput
+            label="Description"
+            numberOfLines={14}
+            placeholder="Provide a detailed explanation, including key information, steps, or insights relevant to this topic"
+            value={form.description}
+            onChangeText={(val) => handleChange(val, "description")}
+            error={formErrors.description}
+          />
+          <BaseInput
+            label="Link"
+            numberOfLines={1}
+            placeholder="Add a reference URL (optional)"
+            value={form.link}
+            onChangeText={(val) => handleChange(val, "link")}
+            error={formErrors.link}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
+      {!isKeyboardVisible && (
+        <BaseButton
+          text="Submit"
+          style={styles.buttonStyles}
+          textStyle={STYLES.textBold}
+          onPress={handleSubmit}
+          disabled={loading}
         />
-        <BaseInput
-          label="Description"
-          numberOfLines={14}
-          placeholder="Provide a detailed explanation, including key information, steps, or insights relevant to this topic"
-          value={form.description}
-          onChangeText={(val) => handleChange(val, "description")}
-          error={formErrors.description}
-        />
-        <BaseInput
-          label="Link"
-          numberOfLines={1}
-          placeholder="Add a reference URL (optional)"
-          value={form.link}
-          onChangeText={(val) => handleChange(val, "link")}
-          error={formErrors.link}
-        />
-      </ScrollView>
-      <BaseButton
-        text="Submit"
-        style={styles.buttonStyles}
-        textStyle={STYLES.textBold}
-        onPress={handleSubmit}
-      />
-    </KeyboardAvoidingView>
+      )}
+    </View>
   );
 };
 

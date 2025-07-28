@@ -1,26 +1,27 @@
+import BaseButton from "@/src/components/common/BaseButton";
+import BaseInput from "@/src/components/common/BaseInput";
+import Container from "@/src/components/common/Container";
+import { COLORS } from "@/src/constants/colors";
+import { STYLES } from "@/src/constants/styles";
+import { AntDesign } from "@expo/vector-icons";
+import React from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   Dimensions,
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
-  KeyboardAvoidingViewBase,
+  StyleSheet,
+  View,
 } from "react-native";
-import React from "react";
-import Container from "@/src/components/common/Container";
-import BaseText from "@/src/components/common/BaseText";
-import { STYLES } from "@/src/constants/styles";
-import BaseInput from "@/src/components/common/BaseInput";
-import { COLORS } from "@/src/constants/colors";
-import BaseButton from "@/src/components/common/BaseButton";
-import { AntDesign, EvilIcons } from "@expo/vector-icons";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const RagBot = () => {
   return (
     <Container style={STYLES.justifyEnd} noPadding>
-      <KeyboardAvoidingView style={STYLES.flex}>
+      <KeyboardAvoidingView
+        style={STYLES.flex}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <ScrollView
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"

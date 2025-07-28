@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   baseStyles: {
     borderRadius: 24,
     overflow: "hidden",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.button,
     paddingVertical: 14,
     paddingHorizontal: 16,
     width: "80%",
