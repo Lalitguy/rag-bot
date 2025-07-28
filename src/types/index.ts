@@ -8,4 +8,8 @@ interface KnowledgeFormDataWithId extends KnowledgeFormData {
   id: string;
 }
 
-export { KnowledgeFormData, KnowledgeFormDataWithId };
+interface ChatPrompt {
+  prompt: string;
+}
+
+export { KnowledgeFormData, KnowledgeFormDataWithId, ChatPrompt };
