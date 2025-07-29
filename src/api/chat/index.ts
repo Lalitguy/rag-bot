@@ -1,6 +1,5 @@
 import type { ChatPrompt } from "@/src/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { router } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -14,7 +13,8 @@ export const useChatPrompt = () => {
           "Content-Type": "application/json",
         },
       });
-      return response.json();
+      const responseJSON = await response.json();
+      return responseJSON.data;
     },
     async onSuccess() {
       console.log("cnat successful");

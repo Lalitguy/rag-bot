@@ -5,6 +5,9 @@ export const STYLES = StyleSheet.create({
   centerSelf: {
     alignSelf: "center",
   },
+  endSef: {
+    alignSelf: "flex-end",
+  },
   justifyEnd: {
     justifyContent: "flex-end",
   },

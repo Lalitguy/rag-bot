@@ -1,10 +1,13 @@
+import { useChatPrompt } from "@/src/api/chat";
 import BaseButton from "@/src/components/common/BaseButton";
 import BaseInput from "@/src/components/common/BaseInput";
+import BaseText from "@/src/components/common/BaseText";
 import Container from "@/src/components/common/Container";
 import { COLORS } from "@/src/constants/colors";
 import { STYLES } from "@/src/constants/styles";
+import { ChatPrompt, ChatListItem } from "@/src/types";
 import { AntDesign } from "@expo/vector-icons";
-import React from "react";
+import React, { useState } from "react";
 import {
   Dimensions,
   KeyboardAvoidingView,
@@ -16,6 +19,34 @@ import {
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const RagBot = () => {
+  const { mutate: promptSearch } = useChatPrompt();
+  const [inputText, setInputText] = useState("");
+
+  const [chatList, setChatList] = useState<ChatListItem[]>([]);
+
+  const handleTextChange = (text: string) => {
+    setInputText(text);
+  };
+
+  const handleSubmit = () => {
+    if (inputText) {
+      setChatList((prev) => [...prev, { content: inputText, role: "user" }]);
+
+      const promptData = {
+        prompt: inputText,
+      };
+      setInputText("");
+      promptSearch(promptData, {
+        onSuccess(data) {
+          setChatList((prev) => [
+            ...prev,
+            { content: data, role: "assistant" },
+          ]);
+        },
+      });
+    }
+  };
+
   return (
     <Container style={STYLES.justifyEnd} noPadding>
       <KeyboardAvoidingView
@@ -25,22 +56,50 @@ const RagBot = () => {
         <ScrollView
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
-          style={STYLES.flex}
-        ></ScrollView>
+          style={styles.scrollWrap}
+        >
+          {chatList.map((item, index) => (
+            <View
+              key={index}
+              style={[
+                STYLES.flexRow,
+                item.role === "user" ? STYLES.endSef : {},
+              ]}
+            >
+              <View
+                style={
+                  item.role === "user"
+                    ? styles.userChatWrap
+                    : styles.assistantChatWrap
+                }
+              >
+                <BaseText text={item.content} />
+              </View>
+              {item.role === "user" && (
+                <View style={styles.userChatTail}>
+                  <View style={styles.userChatTailCut} />
+                </View>
+              )}
+            </View>
+          ))}
+          <View style={styles.emptyHeight} />
+        </ScrollView>
         <View style={[styles.searchWrap]}>
           <BaseInput
             placeholder="Ask a question..."
             numberOfLines={4}
             autoHeight={false}
             bottomSpacing={false}
+            onChangeText={handleTextChange}
+            value={inputText}
           />
           <View style={[STYLES.flexRow, STYLES.justifyEnd]}>
             <BaseButton
               style={styles.buttonStyle}
+              onPress={handleSubmit}
               customComponent={
                 <AntDesign name="arrowup" size={24} color="black" />
               }
-              disabled
             />
           </View>
         </View>
@@ -50,11 +109,15 @@ const RagBot = () => {
 };
 
 const styles = StyleSheet.create({
+  scrollWrap: {
+    flex: 1,
+    marginBottom: 90,
+  },
   searchWrap: {
     position: "absolute",
-    bottom: 5,
-    width: SCREEN_WIDTH - 16,
-    left: 8,
+    bottom: 0,
+    width: SCREEN_WIDTH,
+    // left: 8,
     gap: 6,
     backgroundColor: COLORS.darkTertiary,
     borderRadius: 12,
@@ -68,8 +131,48 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 4,
-    marginBottom: 4,
+    marginRight: 8,
+    marginBottom: 8,
+  },
+  userChatWrap: {
+    backgroundColor: COLORS.darkTertiary,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    borderBottomRightRadius: 0,
+    maxWidth: "80%",
+    alignSelf: "flex-end",
+    marginTop: 12,
+    position: "relative",
+    opacity: 0.9,
+  },
+  userChatTail: {
+    width: 6,
+    height: "100%",
+    backgroundColor: COLORS.darkTertiary,
+    position: "relative",
+    marginRight: 8,
+  },
+  userChatTailCut: {
+    position: "absolute",
+    top: 0,
+    bottom: 2,
+    width: 6,
+    backgroundColor: COLORS.darkSecondary,
+    right: 0,
+    borderBottomLeftRadius: 8,
+  },
+  assistantChatWrap: {
+    backgroundColor: COLORS.darkSecondary,
+    paddingVertical: 6,
+    width: "90%",
+    alignSelf: "flex-start",
+    marginLeft: 12,
+    marginTop: 6,
+    textAlign: "justify",
+  },
+  emptyHeight: {
+    height: 30,
   },
 });
 

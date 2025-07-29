@@ -12,4 +12,9 @@ interface ChatPrompt {
   prompt: string;
 }
 
-export { KnowledgeFormData, KnowledgeFormDataWithId, ChatPrompt };
+interface ChatListItem {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export { KnowledgeFormData, KnowledgeFormDataWithId, ChatPrompt, ChatListItem };
