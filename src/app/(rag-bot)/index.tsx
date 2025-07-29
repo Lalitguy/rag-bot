@@ -1,4 +1,5 @@
 import { useChatPrompt } from "@/src/api/chat";
+import StreamContent from "@/src/components/animated/StreamContent";
 import BaseButton from "@/src/components/common/BaseButton";
 import BaseInput from "@/src/components/common/BaseInput";
 import BaseText from "@/src/components/common/BaseText";
@@ -7,7 +8,7 @@ import { COLORS } from "@/src/constants/colors";
 import { STYLES } from "@/src/constants/styles";
 import { ChatPrompt, ChatListItem } from "@/src/types";
 import { AntDesign } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   KeyboardAvoidingView,
@@ -15,12 +16,14 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  Keyboard,
 } from "react-native";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const RagBot = () => {
   const { mutate: promptSearch } = useChatPrompt();
   const [inputText, setInputText] = useState("");
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const [chatList, setChatList] = useState<ChatListItem[]>([]);
 
@@ -28,8 +31,11 @@ const RagBot = () => {
     setInputText(text);
   };
 
+  useEffect;
+
   const handleSubmit = () => {
     if (inputText) {
+      Keyboard.dismiss();
       setChatList((prev) => [...prev, { content: inputText, role: "user" }]);
 
       const promptData = {
@@ -57,6 +63,10 @@ const RagBot = () => {
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
           style={styles.scrollWrap}
+          ref={scrollViewRef}
+          onContentSizeChange={() => {
+            scrollViewRef.current?.scrollToEnd({ animated: true });
+          }}
         >
           {chatList.map((item, index) => (
             <View
@@ -66,19 +76,19 @@ const RagBot = () => {
                 item.role === "user" ? STYLES.endSef : {},
               ]}
             >
-              <View
-                style={
-                  item.role === "user"
-                    ? styles.userChatWrap
-                    : styles.assistantChatWrap
-                }
-              >
-                <BaseText text={item.content} />
-              </View>
-              {item.role === "user" && (
-                <View style={styles.userChatTail}>
-                  <View style={styles.userChatTailCut} />
+              {item.role === "assistant" ? (
+                <View style={styles.assistantChatWrap}>
+                  <StreamContent content={item.content} />
                 </View>
+              ) : (
+                <>
+                  <View style={styles.userChatWrap}>
+                    <BaseText text={item.content} />
+                  </View>
+                  <View style={styles.userChatTail}>
+                    <View style={styles.userChatTailCut} />
+                  </View>
+                </>
               )}
             </View>
           ))}
