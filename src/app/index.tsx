@@ -3,12 +3,13 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import BaseButton from "../components/common/BaseButton";
 import Container from "../components/common/Container";
-import { useNunitoFont } from "../hooks/useNunitoFont";
+import { useNunitoFont, useFkGroteskFont } from "../hooks/useFontAsset";
 import { STYLES } from "../constants/styles";
 
 const RootIndex = () => {
   const loaded = useNunitoFont();
-  if (!loaded) return null;
+  const fkGroteskLoaded = useFkGroteskFont();
+  if (!loaded || !fkGroteskLoaded) return null;
 
   return (
     <Container centered>

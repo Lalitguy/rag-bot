@@ -10,8 +10,8 @@ const queryClient = new QueryClient();
 const Root = () => {
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle={"light-content"} backgroundColor={COLORS.dark} />
       <SafeAreaView style={{ flex: 1 }}>
+        <StatusBar barStyle={"light-content"} backgroundColor={COLORS.dark} />
         <QueryClientProvider client={queryClient}>
           <Stack
             screenOptions={{

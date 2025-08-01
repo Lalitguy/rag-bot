@@ -11,3 +11,14 @@ export const useNunitoFont = () => {
 
   return loaded;
 };
+
+export const useFkGroteskFont = () => {
+  const [loaded] = useFonts({
+    "Fk-Grotesk": require("../../assets/fonts/fk-grotesk/FK-Grotesk-Neue-Regular.otf"),
+    "Fk-Grotesk-Bold": require("../../assets/fonts/fk-grotesk/FK-Grotesk-Neue-Bold.otf"),
+    "Fk-Grotesk-Italic": require("../../assets/fonts/fk-grotesk/FK-Grotesk-Neue-Italic.otf"),
+    "Fk-Grotesk-Medium": require("../../assets/fonts/fk-grotesk/FK-Grotesk-Neue-Medium.otf"),
+  });
+
+  return loaded;
+};
