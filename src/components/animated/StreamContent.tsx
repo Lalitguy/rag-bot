@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   viewStyle: {
     flexWrap: "wrap",
     flexDirection: "row",
-    gap: 4,
+    gap: 2,
   },
 });
 

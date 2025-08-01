@@ -29,4 +29,7 @@ export const STYLES = StyleSheet.create({
   flexRow: {
     flexDirection: "row",
   },
+  itemsCenter: {
+    alignItems: "center",
+  },
 });

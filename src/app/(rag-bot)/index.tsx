@@ -4,24 +4,25 @@ import BaseButton from "@/src/components/common/BaseButton";
 import BaseInput from "@/src/components/common/BaseInput";
 import BaseText from "@/src/components/common/BaseText";
 import Container from "@/src/components/common/Container";
+import Spinner from "@/src/components/common/Spinnner";
 import { COLORS } from "@/src/constants/colors";
 import { STYLES } from "@/src/constants/styles";
-import { ChatPrompt, ChatListItem } from "@/src/types";
+import { ChatListItem } from "@/src/types";
 import { AntDesign } from "@expo/vector-icons";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Dimensions,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
   View,
-  Keyboard,
 } from "react-native";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const RagBot = () => {
-  const { mutate: promptSearch } = useChatPrompt();
+  const { mutate: promptSearch, isPending } = useChatPrompt();
   const [inputText, setInputText] = useState("");
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -30,8 +31,6 @@ const RagBot = () => {
   const handleTextChange = (text: string) => {
     setInputText(text);
   };
-
-  useEffect;
 
   const handleSubmit = () => {
     if (inputText) {
@@ -76,11 +75,7 @@ const RagBot = () => {
                 item.role === "user" ? STYLES.endSef : {},
               ]}
             >
-              {item.role === "assistant" ? (
-                <View style={styles.assistantChatWrap}>
-                  <StreamContent content={item.content} />
-                </View>
-              ) : (
+              {item.role === "user" ? (
                 <>
                   <View style={styles.userChatWrap}>
                     <BaseText text={item.content} />
@@ -89,9 +84,25 @@ const RagBot = () => {
                     <View style={styles.userChatTailCut} />
                   </View>
                 </>
+              ) : (
+                <View style={styles.assistantChatWrap}>
+                  <BaseText text={item.content} />
+                </View>
               )}
             </View>
           ))}
+          {isPending && (
+            <View
+              style={[
+                STYLES.flexRow,
+                STYLES.itemsCenter,
+                styles.assistantChatWrap,
+              ]}
+            >
+              <Spinner />
+              <BaseText text="Thinking..." />
+            </View>
+          )}
           <View style={styles.emptyHeight} />
         </ScrollView>
         <View style={[styles.searchWrap]}>
