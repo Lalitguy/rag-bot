@@ -11,6 +11,9 @@ export const STYLES = StyleSheet.create({
   justifyEnd: {
     justifyContent: "flex-end",
   },
+  spaceBetween: {
+    justifyContent: "space-between",
+  },
   flex: {
     flex: 1,
     position: "relative",
@@ -42,7 +45,7 @@ export const STYLES = StyleSheet.create({
   fontSize16: {
     fontSize: 16,
   },
-  mTop10: {
-    marginTop: 10,
+  mBottom10: {
+    marginBottom: 10,
   },
 });

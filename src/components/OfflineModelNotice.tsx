@@ -24,7 +24,7 @@ const OfflineModelNotice = () => {
       <BaseButton
         text="I Understand"
         style={styles.understandButton}
-        onPress={() => setOfflinePermission(false)}
+        onPress={() => setOfflinePermission(true)}
       />
     </>
   );

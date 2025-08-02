@@ -1,8 +1,12 @@
+type ModelType = "qwen3" | "ilama3" | "smollm2";
+
 interface ModelProviderProps {
   offlinePermission: boolean;
   setOfflinePermission: (value: boolean) => void;
   isModelReady: boolean;
   setModelReady: (value: boolean) => void;
+  model: ModelType[] | null;
+  addModel: (model: ModelType[]) => void;
 }
 
 interface KnowledgeFormData {
@@ -25,6 +29,7 @@ interface ChatListItem {
 }
 
 export {
+  ModelType,
   ModelProviderProps,
   KnowledgeFormData,
   KnowledgeFormDataWithId,
