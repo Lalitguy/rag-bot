@@ -1,11 +1,8 @@
 interface ModelProviderProps {
   offlinePermission: boolean;
   setOfflinePermission: (value: boolean) => void;
-  isModelDownloading: boolean;
-  downloadModel: (value: boolean) => void;
-  downloadProgress: number;
-  error: string | null;
   isModelReady: boolean;
+  setModelReady: (value: boolean) => void;
 }
 
 interface KnowledgeFormData {
