@@ -32,4 +32,17 @@ export const STYLES = StyleSheet.create({
   itemsCenter: {
     alignItems: "center",
   },
+  textFkBold: {
+    fontFamily: "Fk-Grotesk-Bold",
+    fontSize: 16,
+  },
+  textFkRegular: {
+    fontFamily: "Fk-Grotesk",
+  },
+  fontSize16: {
+    fontSize: 16,
+  },
+  mTop10: {
+    marginTop: 10,
+  },
 });
