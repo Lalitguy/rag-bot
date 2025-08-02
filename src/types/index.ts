@@ -1,3 +1,13 @@
+interface ModelProviderProps {
+  offlinePermission: boolean;
+  setOfflinePermission: (value: boolean) => void;
+  isModelDownloading: boolean;
+  downloadModel: (value: boolean) => void;
+  downloadProgress: number;
+  error: string | null;
+  isModelReady: boolean;
+}
+
 interface KnowledgeFormData {
   title: string;
   description: string;
@@ -17,4 +27,10 @@ interface ChatListItem {
   content: string;
 }
 
-export { KnowledgeFormData, KnowledgeFormDataWithId, ChatPrompt, ChatListItem };
+export {
+  ModelProviderProps,
+  KnowledgeFormData,
+  KnowledgeFormDataWithId,
+  ChatPrompt,
+  ChatListItem,
+};
