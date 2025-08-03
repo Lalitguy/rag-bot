@@ -38,7 +38,7 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
       setIsModelReady(modelReady === "true");
     };
 
-    checkModelStatus().catch(console.error);
+    checkModelStatus();
   }, []);
 
   const handleOfflinePermission = (permission: boolean) => {

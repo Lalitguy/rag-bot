@@ -16,11 +16,5 @@ export const useChatPrompt = () => {
       const responseJSON = await response.json();
       return responseJSON.data;
     },
-    async onSuccess() {
-      console.log("cnat successful");
-    },
-    async onError(error) {
-      console.log(error);
-    },
   });
 };

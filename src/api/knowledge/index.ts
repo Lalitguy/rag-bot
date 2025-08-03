@@ -18,12 +18,11 @@ export const useKnowledgeAdd = () => {
       return response.json();
     },
     async onSuccess() {
-      console.log("knowledge added");
       router.replace("/(rag-bot)/knowledge-base");
       queryClient.invalidateQueries({ queryKey: ["knowledge-list"] });
     },
     async onError(error) {
-      console.log(error);
+      console.error(error);
     },
   });
 };

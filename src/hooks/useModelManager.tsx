@@ -25,7 +25,6 @@ export function useModelManager() {
         modelSource: vectorStoreModel.modelSource,
         tokenizerSource: vectorStoreModel.tokenizerSource,
         onDownloadProgress: (progress: number) => {
-          // console.log("Vector store download progress:", progress);
           setVectorStoreModel((prev) => ({
             ...prev,
             downloadProgress: progress,
@@ -47,7 +46,6 @@ export function useModelManager() {
         tokenizerSource: model.tokenizerSource,
         tokenizerConfigSource: model.tokenizerConfigSource,
         onDownloadProgress: (progress: number) => {
-          console.log("progress", progress);
           updateModels((prev) => {
             return prev.map((m) =>
               m.id === model.id
@@ -72,7 +70,6 @@ export function useModelManager() {
   }
 
   useEffect(() => {
-    console.log("detected change");
     const initializeLLMs = async () => {
       // await Promise.all(models.map((mode) => downloadModel(mode)));
       for (const model of models) {
@@ -80,7 +77,7 @@ export function useModelManager() {
       }
     };
     if (models && models.length > 0) {
-      initializeLLMs().catch(console.error);
+      initializeLLMs();
     }
   }, [selectedModel]);
 
