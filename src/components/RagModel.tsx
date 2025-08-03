@@ -1,41 +1,46 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Text, View } from "react-native";
 
-import {
-  ExecuTorchEmbeddings,
-  ExecuTorchLLM,
-} from "@react-native-rag/executorch";
-import {
-  ALL_MINILM_L6_V2,
-  ALL_MINILM_L6_V2_TOKENIZER,
-  QWEN3_0_6B_QUANTIZED,
-  QWEN3_TOKENIZER,
-  QWEN3_TOKENIZER_CONFIG,
-} from "react-native-executorch";
+import { ExecuTorchLLM } from "@react-native-rag/executorch";
 import { MemoryVectorStore, useRAG } from "react-native-rag";
+import DownloadProgress from "./common/DownloadProgress";
+import { ModelType } from "../types";
+import BaseText from "./common/BaseText";
+import { useRAGModel } from "../providers/RAGModelProvider";
 
-const RagModel = () => {
-  const [downloadProgress, setDownloadProgress] = React.useState(0);
+interface RagModelProps {
+  vectorStore: MemoryVectorStore;
+  llm: ExecuTorchLLM;
+  selectedModel: ModelType;
+}
 
-  const vectorStore = useMemo(() => {
-    return new MemoryVectorStore({
-      embeddings: new ExecuTorchEmbeddings({
-        modelSource: ALL_MINILM_L6_V2,
-        tokenizerSource: ALL_MINILM_L6_V2_TOKENIZER,
-      }),
-    });
-  }, []);
-
-  const llm = useMemo(() => {
-    return new ExecuTorchLLM({
-      modelSource: QWEN3_0_6B_QUANTIZED,
-      tokenizerSource: QWEN3_TOKENIZER,
-      tokenizerConfigSource: QWEN3_TOKENIZER_CONFIG,
-      onDownloadProgress: setDownloadProgress,
-    });
-  }, []);
-
+const RagModel = ({ vectorStore, llm, selectedModel }: RagModelProps) => {
+  const { vectorStoreModel } = useRAGModel();
   const rag = useRAG({ vectorStore, llm });
+
+  if (!rag.isReady) {
+    return (
+      <>
+        {vectorStoreModel.downloadProgress < 1 && (
+          <>
+            <BaseText text={`Downloading Vector Store`} />
+            <DownloadProgress progress={vectorStoreModel.downloadProgress} />
+          </>
+        )}
+        <BaseText
+          text={`Downloading ${selectedModel.name.replace(
+            "(Recommended)",
+            ""
+          )} - ${
+            selectedModel.downloadProgress === 0
+              ? "(in queue)"
+              : `${selectedModel.downloadProgress}%`
+          }`}
+        />
+        <DownloadProgress progress={selectedModel.downloadProgress} />
+      </>
+    );
+  }
 
   return (
     <View>

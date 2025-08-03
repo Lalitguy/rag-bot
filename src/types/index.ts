@@ -1,3 +1,4 @@
+import { VectorStore } from "./../constants/map";
 import { ResourceSource } from "react-native-rag";
 
 interface ModelType {
@@ -12,6 +13,13 @@ interface ModelType {
   modelSize: string;
 }
 
+export type VectorStoreModelType = Omit<
+  ModelType,
+  "id" | "tokenizerConfigSource"
+> & {
+  id: "vectorStore";
+};
+
 interface ModelProviderProps {
   offlinePermission: boolean;
   setOfflinePermission: (value: boolean) => void;
@@ -19,6 +27,10 @@ interface ModelProviderProps {
   setModelReady: (value: boolean) => void;
   models: ModelType[];
   updateModels: React.Dispatch<React.SetStateAction<ModelType[]>>;
+  vectorStoreModel: VectorStoreModelType;
+  setVectorStoreModel: React.Dispatch<
+    React.SetStateAction<VectorStoreModelType>
+  >;
 }
 
 interface KnowledgeFormData {

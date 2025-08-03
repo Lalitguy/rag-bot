@@ -29,7 +29,7 @@ const ModelCard = ({
     <View style={styles.cardWrap}>
       <Pressable
         style={styles.card}
-        android_ripple={{ color: COLORS.lightGray }}
+        android_ripple={onPress ? { color: COLORS.lightGray } : undefined}
         onPress={onPress}
       >
         <View style={[STYLES.flexRow, STYLES.spaceBetween]}>

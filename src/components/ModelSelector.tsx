@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { COLORS } from "../constants/colors";
-import { ModelMap } from "../constants/map";
+import { ModelMap, VectorStore } from "../constants/map";
 import { STYLES } from "../constants/styles";
 import { useRAGModel } from "../providers/RAGModelProvider";
 import { ModelType } from "../types";
@@ -23,24 +23,35 @@ const ModelSelector = () => {
   };
 
   return (
-    <View>
-      <BaseText
-        text="Select Model"
-        style={[STYLES.textBold, STYLES.fontSize16, STYLES.mBottom10]}
-      />
-      {ModelMap.map((model) => {
-        const selected = selectedModel.includes(model);
-        return (
-          <ModelCard
-            key={model.id}
-            name={model.name}
-            description={model.description}
-            modelSize={model.modelSize}
-            selected={selected}
-            onPress={() => handleModelSelect(model, selected)}
-          />
-        );
-      })}
+    <>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
+        <BaseText
+          text="Select Model"
+          style={[STYLES.textBold, STYLES.fontSize16]}
+        />
+        <ModelCard
+          name={VectorStore.name}
+          description={VectorStore.description}
+          modelSize={VectorStore.modelSize}
+          selected={true}
+        />
+        {ModelMap.map((model) => {
+          const selected = selectedModel.includes(model);
+          return (
+            <ModelCard
+              key={model.id}
+              name={model.name}
+              description={model.description}
+              modelSize={model.modelSize}
+              selected={selected}
+              onPress={() => handleModelSelect(model, selected)}
+            />
+          );
+        })}
+      </ScrollView>
       <BaseButton
         text={`Download Model ${
           selectedModel.length > 1 ? `(${selectedModel.length})` : ""
@@ -50,17 +61,25 @@ const ModelSelector = () => {
         textStyle={styles.textStyle}
         disabled={selectedModel.length === 0}
       />
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollView: {
+    marginBottom: 50,
+    flex: 1,
+  },
   buttonStyle: {
     marginTop: 20,
     alignSelf: "center",
     width: "100%",
     paddingVertical: 15,
     backgroundColor: COLORS.green,
+    position: "absolute",
+    bottom: 0,
+    left: 12,
+    right: 0,
   },
   textStyle: {
     ...STYLES.textBold,

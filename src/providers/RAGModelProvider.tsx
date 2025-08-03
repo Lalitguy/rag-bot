@@ -5,8 +5,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import { ModelProviderProps, ModelType } from "../types";
+import { ModelProviderProps, ModelType, VectorStoreModelType } from "../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { VectorStore } from "../constants/map";
 
 const ModelContext = createContext<ModelProviderProps>({
   offlinePermission: false,
@@ -15,12 +16,16 @@ const ModelContext = createContext<ModelProviderProps>({
   setModelReady: (v: boolean) => {},
   models: [],
   updateModels: () => {},
+  vectorStoreModel: VectorStore,
+  setVectorStoreModel: () => {},
 });
 
 const RAGModelProvider = ({ children }: PropsWithChildren) => {
   const [offlinePermission, setOfflinePermission] = useState(false);
   const [isModelReady, setIsModelReady] = useState(false);
   const [models, setModels] = useState<ModelType[]>([]);
+  const [vectorStoreModel, setVectorStoreModel] =
+    useState<VectorStoreModelType>(VectorStore);
 
   useEffect(() => {
     const checkModelStatus = async () => {
@@ -57,6 +62,8 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
         setModelReady: handleModelReady,
         models,
         updateModels: setModels,
+        vectorStoreModel,
+        setVectorStoreModel,
       }}
     >
       {children}

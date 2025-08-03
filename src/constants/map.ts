@@ -1,4 +1,6 @@
 import {
+  ALL_MINILM_L6_V2,
+  ALL_MINILM_L6_V2_TOKENIZER,
   LLAMA3_2_1B_QLORA,
   LLAMA3_2_1B_TOKENIZER,
   LLAMA3_2_TOKENIZER_CONFIG,
@@ -9,7 +11,7 @@ import {
   SMOLLM2_1_TOKENIZER,
   SMOLLM2_1_TOKENIZER_CONFIG,
 } from "react-native-executorch";
-import { ModelType } from "../types";
+import { ModelType, VectorStoreModelType } from "../types";
 
 export const ModelMap: ModelType[] = [
   {
@@ -49,3 +51,15 @@ export const ModelMap: ModelType[] = [
     isReady: false,
   },
 ];
+
+export const VectorStore: VectorStoreModelType = {
+  id: "vectorStore",
+  name: "Vector - all-MiniLM (Mandatory)",
+  description:
+    "A lightweight memory vector store for efficient retrieval and semantic search using MiniLM embeddings.",
+  modelSize: "91 MB",
+  modelSource: ALL_MINILM_L6_V2,
+  tokenizerSource: ALL_MINILM_L6_V2_TOKENIZER,
+  downloadProgress: 0,
+  isReady: false,
+};
