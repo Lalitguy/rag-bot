@@ -31,6 +31,8 @@ interface ModelProviderProps {
   setVectorStoreModel: React.Dispatch<
     React.SetStateAction<VectorStoreModelType>
   >;
+  selectedModel: ModelType["id"][];
+  updateSelectedModel: React.Dispatch<React.SetStateAction<ModelType["id"][]>>;
 }
 
 interface KnowledgeFormData {

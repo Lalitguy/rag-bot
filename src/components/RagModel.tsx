@@ -41,6 +41,13 @@ const RagModel = ({ vectorStore, llm, selectedModel }: RagModelProps) => {
       </>
     );
   }
+  if (rag.error) {
+    console.error("RAG Error:", rag.error);
+    return <BaseText text={`Error: ${rag.error}`} />;
+  }
+  if (rag.isReady) {
+    return <BaseText text="Model Ready" />;
+  }
 
   return (
     <View>

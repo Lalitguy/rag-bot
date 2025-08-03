@@ -10,7 +10,7 @@ import BaseButton from "./common/BaseButton";
 import BaseText from "./common/BaseText";
 
 const ModelSelector = () => {
-  const { updateModels } = useRAGModel();
+  const { updateModels, updateSelectedModel } = useRAGModel();
   const [selectedModel, setSelectedModel] = useState<ModelType[]>([]);
 
   const handleModelSelect = (id: ModelType, remove: boolean = false) => {
@@ -56,7 +56,12 @@ const ModelSelector = () => {
         text={`Download Model ${
           selectedModel.length > 1 ? `(${selectedModel.length})` : ""
         }`}
-        onPress={() => updateModels(selectedModel)}
+        onPress={() => {
+          updateModels(selectedModel);
+          updateSelectedModel(() => {
+            return selectedModel.map((m) => m.id);
+          });
+        }}
         style={styles.buttonStyle}
         textStyle={styles.textStyle}
         disabled={selectedModel.length === 0}

@@ -18,6 +18,8 @@ const ModelContext = createContext<ModelProviderProps>({
   updateModels: () => {},
   vectorStoreModel: VectorStore,
   setVectorStoreModel: () => {},
+  selectedModel: [],
+  updateSelectedModel: () => {},
 });
 
 const RAGModelProvider = ({ children }: PropsWithChildren) => {
@@ -26,6 +28,7 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
   const [models, setModels] = useState<ModelType[]>([]);
   const [vectorStoreModel, setVectorStoreModel] =
     useState<VectorStoreModelType>(VectorStore);
+  const [selectedModel, setSelectedModel] = useState<ModelType["id"][]>([]);
 
   useEffect(() => {
     const checkModelStatus = async () => {
@@ -64,6 +67,8 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
         updateModels: setModels,
         vectorStoreModel,
         setVectorStoreModel,
+        selectedModel,
+        updateSelectedModel: setSelectedModel,
       }}
     >
       {children}

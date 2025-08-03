@@ -8,8 +8,13 @@ import { useRAGModel } from "../providers/RAGModelProvider";
 import { ModelType } from "../types";
 
 export function useModelManager() {
-  const { models, updateModels, vectorStoreModel, setVectorStoreModel } =
-    useRAGModel();
+  const {
+    models,
+    updateModels,
+    vectorStoreModel,
+    setVectorStoreModel,
+    selectedModel,
+  } = useRAGModel();
   const [llms, setLLMs] = useState<Record<ModelType["id"], ExecuTorchLLM> | {}>(
     {}
   );
@@ -20,7 +25,7 @@ export function useModelManager() {
         modelSource: vectorStoreModel.modelSource,
         tokenizerSource: vectorStoreModel.tokenizerSource,
         onDownloadProgress: (progress: number) => {
-          console.log("Vector store download progress:", progress);
+          // console.log("Vector store download progress:", progress);
           setVectorStoreModel((prev) => ({
             ...prev,
             downloadProgress: progress,
@@ -67,6 +72,7 @@ export function useModelManager() {
   }
 
   useEffect(() => {
+    console.log("detected change");
     const initializeLLMs = async () => {
       // await Promise.all(models.map((mode) => downloadModel(mode)));
       for (const model of models) {
@@ -76,7 +82,7 @@ export function useModelManager() {
     if (models && models.length > 0) {
       initializeLLMs().catch(console.error);
     }
-  }, [models]);
+  }, [selectedModel]);
 
   const readyModels = models?.filter((m) => m.isReady) ?? [];
 
