@@ -1,8 +1,15 @@
 import { COLORS } from "@/src/constants/colors";
 import React, { useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Animated } from "react-native";
+import BaseText from "./BaseText";
 
-const DownloadProgress = ({ progress }: { progress: number }) => {
+const DownloadProgress = ({
+  progress,
+  text,
+}: {
+  progress: number;
+  text?: string;
+}) => {
   const animatedWidth = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -19,6 +26,7 @@ const DownloadProgress = ({ progress }: { progress: number }) => {
 
   return (
     <View style={styles.container}>
+      {text && <BaseText text={text} />}
       <View style={styles.track}>
         <Animated.View
           style={[
@@ -32,7 +40,7 @@ const DownloadProgress = ({ progress }: { progress: number }) => {
           ]}
         />
       </View>
-      <Text style={styles.percentage}>{percentage}%</Text>
+      <BaseText style={styles.percentage} text={`${percentage}%`} />
     </View>
   );
 };

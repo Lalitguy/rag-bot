@@ -7,6 +7,7 @@ import DownloadProgress from "./common/DownloadProgress";
 import { ModelType } from "../types";
 import BaseText from "./common/BaseText";
 import { useRAGModel } from "../providers/RAGModelProvider";
+import { useModelManager } from "../hooks/useModelManager";
 
 interface RagModelProps {
   vectorStore: MemoryVectorStore;
@@ -16,28 +17,25 @@ interface RagModelProps {
 
 const RagModel = ({ vectorStore, llm, selectedModel }: RagModelProps) => {
   const { vectorStoreModel } = useRAGModel();
+  const { readyModels } = useModelManager();
   const rag = useRAG({ vectorStore, llm });
 
-  if (!rag.isReady) {
+  if (!rag.isReady && readyModels.length === 0) {
     return (
       <>
         {vectorStoreModel.downloadProgress < 1 && (
-          <>
-            <BaseText text={`Downloading Vector Store`} />
-            <DownloadProgress progress={vectorStoreModel.downloadProgress} />
-          </>
+          <DownloadProgress
+            progress={vectorStoreModel.downloadProgress}
+            text="Downloading Vector Store"
+          />
         )}
-        <BaseText
+        <DownloadProgress
+          progress={selectedModel.downloadProgress}
           text={`Downloading ${selectedModel.name.replace(
             "(Recommended)",
             ""
-          )} - ${
-            selectedModel.downloadProgress === 0
-              ? "(in queue)"
-              : `${selectedModel.downloadProgress}%`
-          }`}
+          )}`}
         />
-        <DownloadProgress progress={selectedModel.downloadProgress} />
       </>
     );
   }
