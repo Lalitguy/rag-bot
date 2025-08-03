@@ -1,13 +1,13 @@
-import { View, Text, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import BaseText from "./common/BaseText";
-import { STYLES } from "../constants/styles";
-import ModelCard from "./cards/ModelCard";
-import { ModelMap } from "../constants/map";
-import BaseButton from "./common/BaseButton";
+import { StyleSheet, View } from "react-native";
 import { COLORS } from "../constants/colors";
+import { ModelMap } from "../constants/map";
+import { STYLES } from "../constants/styles";
 import { useRAGModel } from "../providers/RAGModelProvider";
 import { ModelType } from "../types";
+import ModelCard from "./cards/ModelCard";
+import BaseButton from "./common/BaseButton";
+import BaseText from "./common/BaseText";
 
 const ModelSelector = () => {
   const { addModel } = useRAGModel();
@@ -29,7 +29,7 @@ const ModelSelector = () => {
         style={[STYLES.textBold, STYLES.fontSize16, STYLES.mBottom10]}
       />
       {ModelMap.map((model) => {
-        const selected = selectedModel.includes(model.id);
+        const selected = selectedModel.includes(model);
         return (
           <ModelCard
             key={model.id}
@@ -37,7 +37,7 @@ const ModelSelector = () => {
             description={model.description}
             modelSize={model.modelSize}
             selected={selected}
-            onPress={() => handleModelSelect(model.id, selected)}
+            onPress={() => handleModelSelect(model, selected)}
           />
         );
       })}

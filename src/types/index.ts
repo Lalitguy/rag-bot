@@ -1,4 +1,16 @@
-type ModelType = "qwen3" | "ilama3" | "smollm2";
+import { ResourceSource } from "react-native-rag";
+
+interface ModelType {
+  id: "qwen3" | "ilama3" | "smollm2";
+  modelSource: ResourceSource;
+  tokenizerSource: ResourceSource;
+  tokenizerConfigSource: ResourceSource;
+  downloadProgress: number;
+  isReady: boolean;
+  name: string;
+  description: string;
+  modelSize: string;
+}
 
 interface ModelProviderProps {
   offlinePermission: boolean;
@@ -29,10 +41,10 @@ interface ChatListItem {
 }
 
 export {
-  ModelType,
-  ModelProviderProps,
+  ChatListItem,
+  ChatPrompt,
   KnowledgeFormData,
   KnowledgeFormDataWithId,
-  ChatPrompt,
-  ChatListItem,
+  ModelProviderProps,
+  ModelType,
 };
