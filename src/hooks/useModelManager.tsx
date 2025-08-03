@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { MemoryVectorStore } from "react-native-rag";
 import { useRAGModel } from "../providers/RAGModelProvider";
 import { ModelType } from "../types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function useModelManager() {
   const {
@@ -47,15 +48,21 @@ export function useModelManager() {
         tokenizerConfigSource: model.tokenizerConfigSource,
         onDownloadProgress: (progress: number) => {
           updateModels((prev) => {
-            return prev.map((m) =>
-              m.id === model.id
+            return prev.map((m) => {
+              if (m.downloadProgress !== 1 && progress === 1) {
+                const key = `model_ready_${m.id}`;
+                AsyncStorage.getItem(key).then((val) => {
+                  if (!val) AsyncStorage.setItem(key, "true");
+                });
+              }
+              return m.id === model.id
                 ? {
                     ...m,
                     downloadProgress: progress,
                     isReady: progress === 1,
                   }
-                : m
-            );
+                : m;
+            });
           });
         },
       });

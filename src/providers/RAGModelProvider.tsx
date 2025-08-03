@@ -7,24 +7,21 @@ import {
 } from "react";
 import { ModelProviderProps, ModelType, VectorStoreModelType } from "../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { VectorStore } from "../constants/map";
+import { ModelMap, VectorStore } from "../constants/map";
 
 const ModelContext = createContext<ModelProviderProps>({
   offlinePermission: false,
   setOfflinePermission: (v: boolean) => {},
-  isModelReady: false,
-  setModelReady: (v: boolean) => {},
   models: [],
   updateModels: () => {},
   vectorStoreModel: VectorStore,
   setVectorStoreModel: () => {},
   selectedModel: [],
-  updateSelectedModel: () => {},
+  updateSelectedModel: (v: ModelType["id"][]) => {},
 });
 
 const RAGModelProvider = ({ children }: PropsWithChildren) => {
   const [offlinePermission, setOfflinePermission] = useState(false);
-  const [isModelReady, setIsModelReady] = useState(false);
   const [models, setModels] = useState<ModelType[]>([]);
   const [vectorStoreModel, setVectorStoreModel] =
     useState<VectorStoreModelType>(VectorStore);
@@ -34,8 +31,20 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
     const checkModelStatus = async () => {
       const offlinePermission = await AsyncStorage.getItem("offlinePermission");
       setOfflinePermission(offlinePermission === "true");
-      const modelReady = await AsyncStorage.getItem("modelReady");
-      setIsModelReady(modelReady === "true");
+
+      for (const model of ModelMap) {
+        const isReady = await AsyncStorage.getItem(`model_ready_${model.id}`);
+        const modelSelected = await AsyncStorage.getItem(
+          `model_selected_${model.id}`
+        );
+        if (modelSelected === "true") {
+          setSelectedModel((prev) => [...prev, model.id]);
+          setModels((prev) => [
+            ...prev,
+            { ...model, isReady: isReady === "true" },
+          ]);
+        }
+      }
     };
 
     checkModelStatus();
@@ -46,29 +55,24 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
     AsyncStorage.setItem("offlinePermission", String(permission));
   };
 
-  const handleModelReady = (ready: boolean) => {
-    setIsModelReady(ready);
-    AsyncStorage.setItem("modelReady", String(ready));
-  };
-
-  useEffect(() => {
-    if (offlinePermission) {
+  const handleSelectedModel = (model: ModelType["id"][]) => {
+    setSelectedModel(model);
+    for (const id of model) {
+      const key = `model_selected_${id}`;
+      AsyncStorage.setItem(key, "true");
     }
-  }, [offlinePermission]);
-
+  };
   return (
     <ModelContext.Provider
       value={{
         offlinePermission,
         setOfflinePermission: handleOfflinePermission,
-        isModelReady,
-        setModelReady: handleModelReady,
         models,
         updateModels: setModels,
         vectorStoreModel,
         setVectorStoreModel,
         selectedModel,
-        updateSelectedModel: setSelectedModel,
+        updateSelectedModel: handleSelectedModel,
       }}
     >
       {children}

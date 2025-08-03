@@ -58,9 +58,7 @@ const ModelSelector = () => {
         }`}
         onPress={() => {
           updateModels(selectedModel);
-          updateSelectedModel(() => {
-            return selectedModel.map((m) => m.id);
-          });
+          updateSelectedModel(selectedModel.map((m) => m.id));
         }}
         style={styles.buttonStyle}
         textStyle={styles.textStyle}

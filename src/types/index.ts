@@ -23,8 +23,6 @@ export type VectorStoreModelType = Omit<
 interface ModelProviderProps {
   offlinePermission: boolean;
   setOfflinePermission: (value: boolean) => void;
-  isModelReady: boolean;
-  setModelReady: (value: boolean) => void;
   models: ModelType[];
   updateModels: React.Dispatch<React.SetStateAction<ModelType[]>>;
   vectorStoreModel: VectorStoreModelType;
@@ -32,7 +30,7 @@ interface ModelProviderProps {
     React.SetStateAction<VectorStoreModelType>
   >;
   selectedModel: ModelType["id"][];
-  updateSelectedModel: React.Dispatch<React.SetStateAction<ModelType["id"][]>>;
+  updateSelectedModel: (v: ModelType["id"][]) => void;
 }
 
 interface KnowledgeFormData {
