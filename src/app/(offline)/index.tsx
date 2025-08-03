@@ -3,12 +3,12 @@ import ModelSelector from "@/src/components/ModelSelector";
 import OfflineModelNotice from "@/src/components/OfflineModelNotice";
 import RagModel from "@/src/components/RagModel";
 import { useModelManager } from "@/src/hooks/useModelManager";
-import { useRAGModel } from "@/src/providers/RAGModelProvider";
+import { useRagModelProvider } from "@/src/providers/RAGModelProvider";
 import { ExecuTorchLLM } from "@react-native-rag/executorch";
 import React, { useEffect, useState } from "react";
 
 const ProofOfConcept = () => {
-  const { offlinePermission, models } = useRAGModel();
+  const { offlinePermission, models } = useRagModelProvider();
 
   const { llms, vectorStore } = useModelManager();
   const [selectedLLM, setSelectedLLM] = useState<ExecuTorchLLM | null>(null);

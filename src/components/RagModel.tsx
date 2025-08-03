@@ -6,7 +6,7 @@ import { MemoryVectorStore, useRAG } from "react-native-rag";
 import DownloadProgress from "./common/DownloadProgress";
 import { ModelType } from "../types";
 import BaseText from "./common/BaseText";
-import { useRAGModel } from "../providers/RAGModelProvider";
+import { useRagModelProvider } from "../providers/RAGModelProvider";
 import { useModelManager } from "../hooks/useModelManager";
 
 interface RagModelProps {
@@ -16,7 +16,7 @@ interface RagModelProps {
 }
 
 const RagModel = ({ vectorStore, llm, selectedModel }: RagModelProps) => {
-  const { vectorStoreModel } = useRAGModel();
+  const { vectorStoreModel } = useRagModelProvider();
   const { readyModels } = useModelManager();
   const rag = useRAG({ vectorStore, llm });
 

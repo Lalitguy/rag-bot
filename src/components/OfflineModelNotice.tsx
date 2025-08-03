@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { STYLES } from "../constants/styles";
-import { useRAGModel } from "../providers/RAGModelProvider";
+import { useRagModelProvider } from "../providers/RAGModelProvider";
 import BaseButton from "./common/BaseButton";
 import BaseText from "./common/BaseText";
 
 const OfflineModelNotice = () => {
-  const { setOfflinePermission } = useRAGModel();
+  const { setOfflinePermission } = useRagModelProvider();
   return (
     <>
       <BaseText

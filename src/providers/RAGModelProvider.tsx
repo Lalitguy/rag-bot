@@ -82,4 +82,4 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
 
 export default RAGModelProvider;
 
-export const useRAGModel = () => useContext(ModelContext);
+export const useRagModelProvider = () => useContext(ModelContext);

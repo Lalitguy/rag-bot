@@ -3,14 +3,14 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { COLORS } from "../constants/colors";
 import { ModelMap, VectorStore } from "../constants/map";
 import { STYLES } from "../constants/styles";
-import { useRAGModel } from "../providers/RAGModelProvider";
+import { useRagModelProvider } from "../providers/RAGModelProvider";
 import { ModelType } from "../types";
 import ModelCard from "./cards/ModelCard";
 import BaseButton from "./common/BaseButton";
 import BaseText from "./common/BaseText";
 
 const ModelSelector = () => {
-  const { updateModels, updateSelectedModel } = useRAGModel();
+  const { updateModels, updateSelectedModel } = useRagModelProvider();
   const [selectedModel, setSelectedModel] = useState<ModelType[]>([]);
 
   const handleModelSelect = (id: ModelType, remove: boolean = false) => {

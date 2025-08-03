@@ -4,7 +4,7 @@ import {
 } from "@react-native-rag/executorch";
 import { useEffect, useMemo, useState } from "react";
 import { MemoryVectorStore } from "react-native-rag";
-import { useRAGModel } from "../providers/RAGModelProvider";
+import { useRagModelProvider } from "../providers/RAGModelProvider";
 import { ModelType } from "../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -15,7 +15,7 @@ export function useModelManager() {
     vectorStoreModel,
     setVectorStoreModel,
     selectedModel,
-  } = useRAGModel();
+  } = useRagModelProvider();
   const [llms, setLLMs] = useState<Record<ModelType["id"], ExecuTorchLLM> | {}>(
     {}
   );
