@@ -1,49 +1,62 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { ExecuTorchLLM } from "@react-native-rag/executorch";
 import { ModelType } from "../types";
+import { useRAGModel } from "../providers/RAGModelProvider";
 
-export function useModelManager(initialModes: ModelType[]) {
-  const [modes, setModes] = useState<ModelType[]>(initialModes);
-  const [activeModeId, setActiveModeId] = useState(initialModes[0].id);
-  const [llms, setLLMs] = useState<Record<string, ExecuTorchLLM>>({});
+export function useModelManager() {
+  const { models, updateModels } = useRAGModel();
+  const [llms, setLLMs] = useState<Record<ModelType["id"], ExecuTorchLLM> | {}>(
+    {}
+  );
+
+  async function downloadModel(model: ModelType) {
+    const isAlreadyReady = models.find((m) => m.id === model.id)?.isReady;
+
+    if (isAlreadyReady) return;
+
+    const llm = new ExecuTorchLLM({
+      modelSource: model.modelSource,
+      tokenizerSource: model.tokenizerSource,
+      tokenizerConfigSource: model.tokenizerConfigSource,
+      onDownloadProgress: (progress: number) => {
+        updateModels((prev) => {
+          return prev.map((m) =>
+            m.id === model.id
+              ? {
+                  ...m,
+                  downloadProgress: progress,
+                  isReady: progress === 1,
+                }
+              : m
+          );
+        });
+      },
+    });
+
+    await llm.load();
+
+    setLLMs((prev) => ({
+      ...(prev ?? {}),
+      [model.id]: llm,
+    }));
+  }
 
   useEffect(() => {
     const initializeLLMs = async () => {
-      const newLLMs: Record<string, ExecuTorchLLM> = {};
-
-      for (const mode of initialModes) {
-        const llm = new ExecuTorchLLM({
-          modelSource: mode.modelSource,
-          tokenizerSource: mode.tokenizerSource,
-          tokenizerConfigSource: mode.tokenizerConfigSource,
-          onDownloadProgress: (progress: number) => {
-            setModes((prevModes) =>
-              prevModes.map((m) =>
-                m.id === mode.id ? { ...m, downloadProgress: progress } : m
-              )
-            );
-          },
-        });
-
-        await llm.load(); // or wait until downloaded
-        newLLMs[mode.id] = llm;
-
-        setModes((prevModes) =>
-          prevModes.map((m) => (m.id === mode.id ? { ...m, isReady: true } : m))
-        );
+      // await Promise.all(models.map((mode) => downloadModel(mode)));
+      for (const model of models) {
+        await downloadModel(model);
       }
-
-      setLLMs(newLLMs);
     };
+    if (models && models.length > 0) {
+      initializeLLMs().catch(console.error);
+    }
+  }, [models]);
 
-    initializeLLMs();
-  }, []);
+  const readyModels = models?.filter((m) => m.isReady) ?? [];
 
   return {
-    modes,
-    activeMode: modes.find((m) => m.id === activeModeId),
-    setActiveModeId,
-    activeLLM: llms[activeModeId],
-    allLLMs: llms,
+    readyModels,
+    llms,
   };
 }

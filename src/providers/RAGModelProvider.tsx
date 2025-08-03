@@ -13,14 +13,14 @@ const ModelContext = createContext<ModelProviderProps>({
   setOfflinePermission: (v: boolean) => {},
   isModelReady: false,
   setModelReady: (v: boolean) => {},
-  model: null,
-  addModel: (model: ModelType[]) => {},
+  models: [],
+  updateModels: () => {},
 });
 
 const RAGModelProvider = ({ children }: PropsWithChildren) => {
   const [offlinePermission, setOfflinePermission] = useState(false);
   const [isModelReady, setIsModelReady] = useState(false);
-  const [model, setModel] = useState<ModelType[] | null>(null);
+  const [models, setModels] = useState<ModelType[]>([]);
 
   useEffect(() => {
     const checkModelStatus = async () => {
@@ -48,10 +48,6 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
     }
   }, [offlinePermission]);
 
-  const addModel = (newModels: ModelType[]) => {
-    setModel((prevModels) => [...(prevModels || []), ...newModels]);
-  };
-
   return (
     <ModelContext.Provider
       value={{
@@ -59,8 +55,8 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
         setOfflinePermission: handleOfflinePermission,
         isModelReady,
         setModelReady: handleModelReady,
-        model,
-        addModel,
+        models,
+        updateModels: setModels,
       }}
     >
       {children}

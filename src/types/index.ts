@@ -17,8 +17,8 @@ interface ModelProviderProps {
   setOfflinePermission: (value: boolean) => void;
   isModelReady: boolean;
   setModelReady: (value: boolean) => void;
-  model: ModelType[] | null;
-  addModel: (model: ModelType[]) => void;
+  models: ModelType[];
+  updateModels: React.Dispatch<React.SetStateAction<ModelType[]>>;
 }
 
 interface KnowledgeFormData {
