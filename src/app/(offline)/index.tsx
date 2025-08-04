@@ -1,3 +1,4 @@
+import BaseText from "@/src/components/common/BaseText";
 import Container from "@/src/components/common/Container";
 import ModelSelector from "@/src/components/ModelSelector";
 import OfflineModelNotice from "@/src/components/OfflineModelNotice";
@@ -20,7 +21,7 @@ const ProofOfConcept = () => {
   }, [llms]);
 
   return (
-    <Container>
+    <Container noPadding>
       {!offlinePermission && <OfflineModelNotice />}
       {offlinePermission && (!models || models.length === 0) && (
         <ModelSelector />
@@ -34,6 +35,8 @@ const ProofOfConcept = () => {
           }
         />
       )}
+      {/* {models.length > 0 &&
+        models.map((model) => <BaseText key={model.id} text={model.name} />)} */}
     </Container>
   );
 };

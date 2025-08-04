@@ -1,6 +1,7 @@
 import {
   createContext,
   PropsWithChildren,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -50,18 +51,19 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
     checkModelStatus();
   }, []);
 
-  const handleOfflinePermission = (permission: boolean) => {
+  const handleOfflinePermission = useCallback((permission: boolean) => {
     setOfflinePermission(permission);
     AsyncStorage.setItem("offlinePermission", String(permission));
-  };
+  }, []);
 
-  const handleSelectedModel = (model: ModelType["id"][]) => {
+  const handleSelectedModel = useCallback((model: ModelType["id"][]) => {
     setSelectedModel(model);
     for (const id of model) {
       const key = `model_selected_${id}`;
       AsyncStorage.setItem(key, "true");
     }
-  };
+  }, []);
+
   return (
     <ModelContext.Provider
       value={{
@@ -70,7 +72,7 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
         models,
         updateModels: setModels,
         vectorStoreModel,
-        setVectorStoreModel,
+        setVectorStoreModel: setVectorStoreModel,
         selectedModel,
         updateSelectedModel: handleSelectedModel,
       }}

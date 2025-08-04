@@ -8,6 +8,7 @@ import { ModelType } from "../types";
 import BaseText from "./common/BaseText";
 import { useRagModelProvider } from "../providers/RAGModelProvider";
 import { useModelManager } from "../hooks/useModelManager";
+import RagChat from "./RagChat";
 
 interface RagModelProps {
   vectorStore: MemoryVectorStore;
@@ -39,18 +40,20 @@ const RagModel = ({ vectorStore, llm, selectedModel }: RagModelProps) => {
       </>
     );
   }
+
   if (rag.error) {
     console.error("RAG Error:", rag.error);
     return <BaseText text={`Error: ${rag.error}`} />;
   }
-  if (rag.isReady) {
-    return <BaseText text="Model Ready" />;
-  }
 
   return (
-    <View>
-      <Text>ModelProgress</Text>
-    </View>
+    <RagChat
+      rag={{
+        ...rag,
+        vectorStore,
+        llm,
+      }}
+    />
   );
 };
 

@@ -1,3 +1,5 @@
+import { Keyboard } from "react-native";
+
 export const isValidUrl = (url: string): boolean => {
   if (!url) return true; // Optional: empty is allowed
 
@@ -7,4 +9,8 @@ export const isValidUrl = (url: string): boolean => {
   } catch (_) {
     return false;
   }
+};
+
+export const dismissKeyboard = () => {
+  Keyboard.dismiss();
 };
