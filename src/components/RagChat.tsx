@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { RAGParams, useRAG } from "react-native-rag";
 import BaseInput from "./common/BaseInput";
@@ -12,6 +12,8 @@ import BaseText from "./common/BaseText";
 import { useRagModelProvider } from "../providers/RAGModelProvider";
 import { useIsFocused } from "@react-navigation/native";
 import BaseButton from "./common/BaseButton";
+import { RagSystemPrompt } from "../constants/map";
+import Spinner from "./common/Spinnner";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 interface RagChatProps {
@@ -25,6 +27,7 @@ const RagChat = ({ rag }: RagChatProps) => {
   const [docIdMap, setDocIdMap] = useState<Map<number, string[]>>(new Map());
   const { docs } = useRagModelProvider();
   const [userInput, setUserInput] = useState("");
+  const [modelThinking, setModelThinking] = useState(false);
 
   useEffect(() => {
     const syncDocs = async () => {
@@ -54,10 +57,22 @@ const RagChat = ({ rag }: RagChatProps) => {
   }, [docs, isScreenFocused]);
 
   const handleSearch = async () => {
-    const result = await rag.generate([{ role: "user", content: userInput }], {
-      augmentedGeneration: true,
-    });
-
+    const userQuery = userInput.trim();
+    setChats((prev) => [...prev, { role: "user", content: userQuery }]);
+    setUserInput("");
+    setModelThinking(true);
+    dismissKeyboard();
+    const result = await rag.generate(
+      [
+        { role: "system", content: RagSystemPrompt },
+        { role: "user", content: userQuery },
+      ],
+      {
+        augmentedGeneration: true,
+      }
+    );
+    setModelThinking(false);
+    setChats((prev) => [...prev, { role: "assistant", content: result }]);
     console.log(result);
   };
 
@@ -87,6 +102,22 @@ const RagChat = ({ rag }: RagChatProps) => {
           />
         </View>
       )}
+      <ScrollView>
+        {chats.map((chat, index) => (
+          <BaseText
+            text={chat.content}
+            key={index}
+            style={chat.role === "user" ? STYLES.endSef : undefined}
+          />
+        ))}
+
+        {modelThinking && (
+          <View style={[STYLES.flexRow, STYLES.itemsCenter, STYLES.mLeft10]}>
+            <Spinner />
+            <BaseText text="Thinking..." />
+          </View>
+        )}
+      </ScrollView>
       <View
         style={[
           chats?.length === 0
@@ -111,6 +142,7 @@ const RagChat = ({ rag }: RagChatProps) => {
               <AntDesign name="arrowup" size={24} color="black" />
             }
             onPress={handleSearch}
+            disabled={modelThinking || userInput.length === 0}
           />
         )}
       </View>
@@ -120,6 +152,7 @@ const RagChat = ({ rag }: RagChatProps) => {
           text="Search"
           customComponent={<AntDesign name="arrowup" size={24} color="black" />}
           onPress={handleSearch}
+          disabled={modelThinking || userInput.length === 0}
         />
       )}
     </View>

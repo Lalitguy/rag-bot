@@ -48,4 +48,7 @@ export const STYLES = StyleSheet.create({
   mBottom10: {
     marginBottom: 10,
   },
+  mLeft10: {
+    marginLeft: 10,
+  },
 });
