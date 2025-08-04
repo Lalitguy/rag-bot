@@ -31,6 +31,13 @@ interface ModelProviderProps {
   >;
   selectedModel: ModelType["id"][];
   updateSelectedModel: (v: ModelType["id"][]) => void;
+  docs: docType[];
+  setDocs: React.Dispatch<React.SetStateAction<docType[]>>;
+}
+
+interface docType {
+  id: number;
+  doc: string;
 }
 
 interface KnowledgeFormData {
@@ -59,4 +66,5 @@ export {
   KnowledgeFormDataWithId,
   ModelProviderProps,
   ModelType,
+  docType,
 };

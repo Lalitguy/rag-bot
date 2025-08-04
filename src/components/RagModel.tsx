@@ -46,15 +46,7 @@ const RagModel = ({ vectorStore, llm, selectedModel }: RagModelProps) => {
     return <BaseText text={`Error: ${rag.error}`} />;
   }
 
-  return (
-    <RagChat
-      rag={{
-        ...rag,
-        vectorStore,
-        llm,
-      }}
-    />
-  );
+  return <RagChat rag={rag} />;
 };
 
 export default RagModel;

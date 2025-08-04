@@ -6,7 +6,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import { ModelProviderProps, ModelType, VectorStoreModelType } from "../types";
+import {
+  docType,
+  ModelProviderProps,
+  ModelType,
+  VectorStoreModelType,
+} from "../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ModelMap, VectorStore } from "../constants/map";
 
@@ -19,6 +24,8 @@ const ModelContext = createContext<ModelProviderProps>({
   setVectorStoreModel: () => {},
   selectedModel: [],
   updateSelectedModel: (v: ModelType["id"][]) => {},
+  docs: [],
+  setDocs: () => {},
 });
 
 const RAGModelProvider = ({ children }: PropsWithChildren) => {
@@ -27,6 +34,7 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
   const [vectorStoreModel, setVectorStoreModel] =
     useState<VectorStoreModelType>(VectorStore);
   const [selectedModel, setSelectedModel] = useState<ModelType["id"][]>([]);
+  const [docs, setDocs] = useState<docType[]>([]);
 
   useEffect(() => {
     const checkModelStatus = async () => {
@@ -75,6 +83,8 @@ const RAGModelProvider = ({ children }: PropsWithChildren) => {
         setVectorStoreModel: setVectorStoreModel,
         selectedModel,
         updateSelectedModel: handleSelectedModel,
+        docs,
+        setDocs,
       }}
     >
       {children}
