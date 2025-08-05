@@ -32,10 +32,7 @@ const RagModel = ({ vectorStore, llm, selectedModel }: RagModelProps) => {
         )}
         <DownloadProgress
           progress={selectedModel.downloadProgress}
-          text={`Downloading ${selectedModel.name.replace(
-            "(Recommended)",
-            ""
-          )}`}
+          text={`Downloading ${selectedModel.name}`}
         />
       </>
     );

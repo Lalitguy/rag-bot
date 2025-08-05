@@ -14,6 +14,9 @@ export const STYLES = StyleSheet.create({
   spaceBetween: {
     justifyContent: "space-between",
   },
+  mHorizontal12: {
+    marginHorizontal: 12,
+  },
   flex: {
     flex: 1,
     position: "relative",

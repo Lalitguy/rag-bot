@@ -5,9 +5,14 @@ import { COLORS } from "@/src/constants/colors";
 interface BaseTextProps {
   text: string;
   style?: StyleProp<TextStyle>;
+  numberOfLines?: number;
 }
-const BaseText = ({ text, style }: BaseTextProps) => {
-  return <Text style={[styles.baseStyles, style]}>{text}</Text>;
+const BaseText = ({ text, style, numberOfLines }: BaseTextProps) => {
+  return (
+    <Text style={[styles.baseStyles, style]} numberOfLines={numberOfLines}>
+      {text}
+    </Text>
+  );
 };
 
 const styles = StyleSheet.create({

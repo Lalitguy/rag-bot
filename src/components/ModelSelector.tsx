@@ -23,7 +23,7 @@ const ModelSelector = () => {
   };
 
   return (
-    <>
+    <View style={styles.container}>
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
@@ -64,11 +64,15 @@ const ModelSelector = () => {
         textStyle={styles.textStyle}
         disabled={selectedModel.length === 0}
       />
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 12,
+    flex: 1,
+  },
   scrollView: {
     marginBottom: 50,
     flex: 1,

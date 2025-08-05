@@ -12,11 +12,12 @@ import {
   SMOLLM2_1_TOKENIZER_CONFIG,
 } from "react-native-executorch";
 import { ModelType, VectorStoreModelType } from "../types";
+import { Message } from "react-native-rag";
 
 export const ModelMap: ModelType[] = [
   {
     id: "qwen3",
-    name: "Qwen3 (Recommended)",
+    name: "Qwen3",
     description:
       "Compact LLM - Fast, cost-efficient inference, good at reasoning. Focus on small model size with high quality.",
     modelSize: "944 MB (0.6B)",
@@ -28,7 +29,7 @@ export const ModelMap: ModelType[] = [
   },
   {
     id: "ilama3",
-    name: "Ilama-3.2 - QLoRa",
+    name: "Ilama-QLoRa",
     description:
       "Lightweight Model fine-tuned with QLoRA for efficient, private, offline language understanding tasks.",
     modelSize: "1.18 GB (1B)",
@@ -40,7 +41,7 @@ export const ModelMap: ModelType[] = [
   },
   {
     id: "smollm2",
-    name: "SmolLm2.1 - Quantized",
+    name: "SmolLm",
     description:
       "Compact and Quantized model for fast, private, on-device language understanding and search.",
     modelSize: "1.31 GB (1.7B)",
@@ -65,8 +66,24 @@ export const VectorStore: VectorStoreModelType = {
 };
 
 export const RagSystemPrompt = `
-You are a friendly and helpful assistant. When answering user questions, first try to use the information provided in the uploaded documents. If relevant information is found, base your answer entirely on that. If the documents do not contain enough information, you may use your general knowledge 
+You are a friendly, conversational AI assistant designed to help users by answering questions using a blend of document-based knowledge and general understanding.
 
-Keep your responses concise (30–150 words), easy to understand, and maintain a warm, conversational tone. Only switch to a professional tone if the user explicitly asks for it.
+Your behavior should feel approachable and helpful — like a knowledgeable human assistant. Prioritize information from the provided documents whenever available. If relevant document information is found, base your response on that entirely. If the documents lack enough information, feel free to use your general knowledge — but make sure to explicitly mention this in your answer (e.g., "Based on what I know..." or "The documents don’t mention this, but generally...").
 
+Keep your responses concise (30–150 words), clear, and human-like. Use warm, natural language and speak directly to the user (e.g., "Here’s what I found for you" or "You can think of it like..."). Avoid sounding robotic, overly formal, or detached. Don’t refer to yourself in the third person.
+
+Default to a conversational tone — friendly, clear, and relaxed. Only switch to a professional or technical tone if the user asks for it explicitly.
+
+Always aim to make the user feel understood and supported.
+
+Avoid internal thoughts or planning in your final message — only output the answer the user should see. Think before you respond, but keep the reasoning to yourself.
 `;
+
+export const assistantExampleMessage: Message = {
+  role: "assistant",
+  content: `Sure! Here's a quick summary for you 😊
+
+Edge CRM is a fully customizable sales CRM designed to help businesses track progress, manage leads, and monitor KPIs using visual dashboards and insights. It's perfect for keeping your team aligned and data-driven.
+
+Let me know if you'd like help with a specific feature!`,
+};

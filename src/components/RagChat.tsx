@@ -65,6 +65,7 @@ const RagChat = ({ rag }: RagChatProps) => {
     const result = await rag.generate(
       [
         { role: "system", content: RagSystemPrompt },
+
         { role: "user", content: userQuery },
       ],
       {
@@ -169,6 +170,9 @@ const styles = StyleSheet.create({
   inputContainerTop: {
     borderRadius: 0,
     paddingVertical: 0,
+    position: "absolute",
+    top: 25,
+    width: SCREEN_WIDTH,
   },
   inputStyle: {
     fontFamily: "Fk-Grotesk",

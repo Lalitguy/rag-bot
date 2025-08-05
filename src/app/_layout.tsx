@@ -11,21 +11,19 @@ const queryClient = new QueryClient();
 const Root = () => {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }}>
-        <StatusBar barStyle={"light-content"} backgroundColor={COLORS.dark} />
-        <RAGModelProvider>
-          <QueryClientProvider client={queryClient}>
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                animation: "slide_from_right",
-              }}
-            >
-              <Stack.Screen name="index" />
-            </Stack>
-          </QueryClientProvider>
-        </RAGModelProvider>
-      </SafeAreaView>
+      <StatusBar barStyle={"light-content"} backgroundColor={COLORS.dark} />
+      <RAGModelProvider>
+        <QueryClientProvider client={queryClient}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              animation: "slide_from_right",
+            }}
+          >
+            <Stack.Screen name="index" />
+          </Stack>
+        </QueryClientProvider>
+      </RAGModelProvider>
     </SafeAreaProvider>
   );
 };

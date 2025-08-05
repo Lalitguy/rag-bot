@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { STYLES } from "../constants/styles";
 import { useRagModelProvider } from "../providers/RAGModelProvider";
 import BaseButton from "./common/BaseButton";
@@ -8,7 +8,7 @@ import BaseText from "./common/BaseText";
 const OfflineModelNotice = () => {
   const { setOfflinePermission } = useRagModelProvider();
   return (
-    <>
+    <View style={styles.container}>
       <BaseText
         text="Want to use the AI fully offline?"
         style={[STYLES.textBold, STYLES.fontSize16]}
@@ -26,11 +26,14 @@ const OfflineModelNotice = () => {
         style={styles.understandButton}
         onPress={() => setOfflinePermission(true)}
       />
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 12,
+  },
   message: {
     marginTop: 10,
     letterSpacing: 1.1,
