@@ -21,15 +21,8 @@ const TabLayout = () => {
         },
         tabBarActiveTintColor: COLORS.button,
         tabBarInactiveTintColor: COLORS.lightGray,
-        headerStyle: {
-          backgroundColor: COLORS.dark,
-        },
-        headerTitleStyle: {
-          color: COLORS.white,
-          fontFamily: "Nunito-Semi",
-          width: "100%",
-        },
         tabBarHideOnKeyboard: true,
+        headerShown: false,
       }}
     >
       <Tabs.Screen
@@ -44,12 +37,20 @@ const TabLayout = () => {
               color={focused ? COLORS.button : COLORS.gray}
             />
           ),
+          headerTitleStyle: {
+            color: COLORS.white,
+            fontFamily: "Nunito-Semi",
+            width: "100%",
+          },
+          headerStyle: {
+            backgroundColor: COLORS.dark,
+          },
         }}
       />
       <Tabs.Screen
         name="knowledge-base"
         options={{
-          title: "Add to knowledge base",
+          headerShown: false,
           tabBarLabel: "Resources",
           tabBarIcon: ({ focused }) => (
             <MaterialIcons
