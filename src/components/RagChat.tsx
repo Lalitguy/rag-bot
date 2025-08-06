@@ -65,7 +65,6 @@ const RagChat = ({ rag }: RagChatProps) => {
     const result = await rag.generate(
       [
         { role: "system", content: RagSystemPrompt },
-
         { role: "user", content: userQuery },
       ],
       {

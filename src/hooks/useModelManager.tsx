@@ -19,6 +19,9 @@ export function useModelManager() {
   const [llms, setLLMs] = useState<Record<ModelType["id"], ExecuTorchLLM> | {}>(
     {}
   );
+  const [readyModels, setReadyModels] = useState<ModelType[]>(
+    models.filter((m) => m.isReady) || []
+  );
 
   const vectorStore = useMemo(() => {
     return new MemoryVectorStore({
@@ -49,7 +52,8 @@ export function useModelManager() {
         onDownloadProgress: (progress: number) => {
           updateModels((prev) => {
             return prev.map((m) => {
-              if (m.downloadProgress !== 1 && progress === 1) {
+              if (m.downloadProgress === 1 || progress === 1) {
+                setReadyModels((prev) => [...prev, m]);
                 const key = `model_ready_${m.id}`;
                 AsyncStorage.getItem(key).then((val) => {
                   if (!val) AsyncStorage.setItem(key, "true");
@@ -78,7 +82,6 @@ export function useModelManager() {
 
   useEffect(() => {
     const initializeLLMs = async () => {
-      // await Promise.all(models.map((mode) => downloadModel(mode)));
       for (const model of models) {
         await downloadModel(model);
       }
@@ -87,8 +90,6 @@ export function useModelManager() {
       initializeLLMs();
     }
   }, [selectedModel]);
-
-  const readyModels = models?.filter((m) => m.isReady) ?? [];
 
   return {
     vectorStore,

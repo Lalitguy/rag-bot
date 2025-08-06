@@ -9,7 +9,7 @@ import { useModelManager } from "@/src/hooks/useModelManager";
 import { useRagModelProvider } from "@/src/providers/RAGModelProvider";
 import { ExecuTorchLLM } from "@react-native-rag/executorch";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 const ProofOfConcept = () => {
   const { offlinePermission, models } = useRagModelProvider();
