@@ -1,3 +1,4 @@
+import AddButton from "@/src/components/animated/AddButton";
 import BaseButton from "@/src/components/common/BaseButton";
 import BaseInput from "@/src/components/common/BaseInput";
 import Container from "@/src/components/common/Container";
@@ -10,22 +11,6 @@ import { Animated, ScrollView, StyleSheet, Text } from "react-native";
 
 const Documents = () => {
   const { docs, setDocs } = useRagModelProvider();
-  const { isKeyboardVisible } = useKeyboard();
-
-  const rotateAnim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(rotateAnim, {
-      toValue: isKeyboardVisible ? 1 : 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  }, [isKeyboardVisible]);
-
-  const rotate = rotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "45deg"],
-  });
 
   const handleDocumentChange = (id: number, text: string) => {
     setDocs((prev) =>
@@ -51,28 +36,9 @@ const Documents = () => {
           />
         ))}
       </ScrollView>
-      <BaseButton
-        customComponent={
-          <Animated.View style={[{ transform: [{ rotate }] }]}>
-            <AntDesign name="plus" size={24} color="black" />
-          </Animated.View>
-        }
-        style={styles.buttonStyle}
-        onPress={isKeyboardVisible ? dismissKeyboard : addDocument}
-      />
+      <AddButton onPress={addDocument} />
     </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  buttonStyle: {
-    width: 65,
-    height: 65,
-    alignItems: "center",
-    position: "absolute",
-    bottom: 80,
-    right: 30,
-  },
-});
 
 export default Documents;

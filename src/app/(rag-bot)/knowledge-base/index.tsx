@@ -5,26 +5,17 @@ import BaseText from "@/src/components/common/BaseText";
 import BaseButton from "@/src/components/common/BaseButton";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/src/constants/colors";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import AddButton from "@/src/components/animated/AddButton";
 
 const KnowledgeList = () => {
+  const handleRedirect = () => {
+    router.push("/(rag-bot)/knowledge-base/add");
+  };
   return (
     <Container>
       <BaseText text="Knowledge List" />
-      <Link asChild href={"/(rag-bot)/knowledge-base/add"}>
-        <BaseButton
-          text="Add New"
-          style={styles.buttonStyles}
-          textStyle={styles.btnText}
-          customComponent={
-            <Ionicons
-              name="add-circle-outline"
-              size={20}
-              color={COLORS.black}
-            />
-          }
-        />
-      </Link>
+      <AddButton onPress={handleRedirect} />
     </Container>
   );
 };
