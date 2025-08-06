@@ -54,4 +54,7 @@ export const STYLES = StyleSheet.create({
   mLeft10: {
     marginLeft: 10,
   },
+  bgTertiary: {
+    backgroundColor: COLORS.darkSecondary,
+  },
 });

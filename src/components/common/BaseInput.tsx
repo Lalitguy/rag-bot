@@ -20,6 +20,7 @@ interface Props {
   error?: string;
   autoHeight?: boolean;
   bottomSpacing?: boolean;
+  labelStyle?: StyleProp<TextStyle>;
 }
 
 const BaseInput = ({
@@ -29,6 +30,7 @@ const BaseInput = ({
   error,
   autoHeight = true,
   bottomSpacing = true,
+  labelStyle,
   ...props
 }: Props) => {
   const heightStyle = useMemo(() => {
@@ -39,7 +41,9 @@ const BaseInput = ({
   }, [numberOfLines]);
   return (
     <View style={[styles.groupWrap, bottomSpacing ? styles.bottomSpacing : {}]}>
-      {label && <BaseText text={label} style={styles.labelStyle} />}
+      {label && (
+        <BaseText text={label} style={[styles.labelStyle, labelStyle || {}]} />
+      )}
       {error && <BaseText text={error} style={STYLES.error} />}
       <TextInput
         style={[styles.baseStyles, style, autoHeight ? heightStyle : {}]}

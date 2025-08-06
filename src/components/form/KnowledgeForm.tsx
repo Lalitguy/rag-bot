@@ -1,5 +1,5 @@
 import { STYLES } from "@/src/constants/styles";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Dimensions,
   Keyboard,
@@ -14,6 +14,9 @@ import { defaultKnowledgeForm } from "@/src/constants/defaults";
 import { KnowledgeFormData } from "@/src/types";
 import { isValidUrl } from "@/src/utils";
 import { useKnowledgeAdd } from "@/src/api/knowledge";
+import useKeyboard from "@/src/hooks/useKeyboard";
+import { useIsFocused } from "@react-navigation/native";
+import { COLORS } from "@/src/constants/colors";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const placeholderTitles = [
@@ -25,12 +28,16 @@ const placeholderTitles = [
 ];
 
 const KnowledgeForm = () => {
-  const placeholder =
-    placeholderTitles[Math.floor(Math.random() * placeholderTitles.length)];
-
   const [form, setForm] = useState(defaultKnowledgeForm);
   const [formErrors, setFormErrors] = useState(defaultKnowledgeForm);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const { isKeyboardVisible } = useKeyboard();
+  const isScreenFocused = useIsFocused();
+  const placeholder = useMemo(
+    () =>
+      placeholderTitles[Math.floor(Math.random() * placeholderTitles.length)],
+    [isScreenFocused]
+  );
 
   const { mutate: insertKnowledge, isPending } = useKnowledgeAdd();
 
@@ -76,27 +83,6 @@ const KnowledgeForm = () => {
 
   const loading = isPending || buttonDisabled;
 
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardVisible(true); // Keyboard is visible
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardVisible(false); // Keyboard is hidden
-      }
-    );
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, []);
-
   return (
     <View style={STYLES.flex}>
       <KeyboardAvoidingView style={STYLES.flex}>
@@ -111,6 +97,8 @@ const KnowledgeForm = () => {
             value={form.title}
             onChangeText={(val) => handleChange(val, "title")}
             error={formErrors.title}
+            style={styles.inputStyle}
+            labelStyle={styles.labelStyle}
           />
           <BaseInput
             label="Description"
@@ -119,6 +107,8 @@ const KnowledgeForm = () => {
             value={form.description}
             onChangeText={(val) => handleChange(val, "description")}
             error={formErrors.description}
+            style={styles.inputStyle}
+            labelStyle={styles.labelStyle}
           />
           <BaseInput
             label="Link"
@@ -127,6 +117,8 @@ const KnowledgeForm = () => {
             value={form.link}
             onChangeText={(val) => handleChange(val, "link")}
             error={formErrors.link}
+            style={styles.inputStyle}
+            labelStyle={styles.labelStyle}
           />
         </ScrollView>
       </KeyboardAvoidingView>
@@ -148,6 +140,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: SCREEN_WIDTH - 24,
+  },
+  inputStyle: {
+    backgroundColor: COLORS.darkSecondary,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.darkTertiary,
+    borderRadius: 0,
+    paddingHorizontal: 0,
+    marginHorizontal: 4,
+  },
+  labelStyle: {
+    paddingHorizontal: 4,
   },
 });
 export default KnowledgeForm;
