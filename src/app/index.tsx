@@ -5,11 +5,12 @@ import BaseButton from "../components/common/BaseButton";
 import Container from "../components/common/Container";
 import { useNunitoFont, useFkGroteskFont } from "../hooks/useFontAsset";
 import { STYLES } from "../constants/styles";
+import LoadingPage from "../components/common/LoadingPage";
 
 const RootIndex = () => {
   const loaded = useNunitoFont();
   const fkGroteskLoaded = useFkGroteskFont();
-  if (!loaded || !fkGroteskLoaded) return null;
+  if (!loaded || !fkGroteskLoaded) return <LoadingPage />;
 
   return (
     <Container centered>

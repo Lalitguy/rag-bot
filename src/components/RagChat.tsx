@@ -14,6 +14,7 @@ import { useIsFocused } from "@react-navigation/native";
 import BaseButton from "./common/BaseButton";
 import { RagSystemPrompt } from "../constants/map";
 import Spinner from "./common/Spinnner";
+import ChatInterface from "./ChatInterface";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 interface RagChatProps {
@@ -28,6 +29,7 @@ const RagChat = ({ rag }: RagChatProps) => {
   const { docs } = useRagModelProvider();
   const [userInput, setUserInput] = useState("");
   const [modelThinking, setModelThinking] = useState(false);
+  const [ragActive, setRagActive] = useState(true);
 
   useEffect(() => {
     const syncDocs = async () => {
@@ -65,7 +67,7 @@ const RagChat = ({ rag }: RagChatProps) => {
         { role: "user", content: userQuery },
       ],
       {
-        augmentedGeneration: true,
+        augmentedGeneration: ragActive,
       }
     );
     setModelThinking(false);
@@ -75,83 +77,16 @@ const RagChat = ({ rag }: RagChatProps) => {
   const isTopBarVisible = isKeyboardVisible && chats.length === 0;
 
   return (
-    <View style={STYLES.flex}>
-      {chats.length === 0 && !isKeyboardVisible && (
-        <View style={styles.textWrap}>
-          <BaseText
-            text="Hi there! I'm your Offline Assistant, here to help you out anytime — no internet needed."
-            style={[styles.assistantText, STYLES.mBottom10]}
-          />
-          <BaseText
-            text="How can I assist you today? 🤗"
-            style={styles.assistantText}
-          />
-        </View>
-      )}
-      {isTopBarVisible && (
-        <View style={styles.topBar}>
-          <AntDesign
-            name="close"
-            size={20}
-            color={COLORS.lightGray}
-            onPress={dismissKeyboard}
-          />
-        </View>
-      )}
-      <ScrollView>
-        {chats.map((chat, index) => (
-          <BaseText
-            text={chat.content}
-            key={index}
-            style={chat.role === "user" ? STYLES.endSef : undefined}
-          />
-        ))}
-
-        {modelThinking && (
-          <View style={[STYLES.flexRow, STYLES.itemsCenter, STYLES.mLeft10]}>
-            <Spinner />
-            <BaseText text="Thinking..." />
-          </View>
-        )}
-      </ScrollView>
-      <View
-        style={[
-          chats?.length === 0
-            ? isKeyboardVisible
-              ? styles.inputContainerTop
-              : styles.initialKeyboard
-            : {},
-          styles.commonInputContainerStyle,
-        ]}
-      >
-        <BaseInput
-          placeholder="Ask me anything, I'm here to help! "
-          numberOfLines={4}
-          style={styles.inputStyle}
-          value={userInput}
-          onChangeText={(text) => setUserInput(text)}
-        />
-        {!isTopBarVisible && (
-          <BaseButton
-            style={styles.buttonStyle}
-            customComponent={
-              <AntDesign name="arrowup" size={24} color="black" />
-            }
-            onPress={handleSearch}
-            disabled={modelThinking || userInput.length === 0}
-          />
-        )}
-      </View>
-      {isTopBarVisible && (
-        <BaseButton
-          style={styles.absoluteSearchButton}
-          text="Search"
-          customComponent={<AntDesign name="arrowup" size={24} color="black" />}
-          onPress={handleSearch}
-          disabled={modelThinking || userInput.length === 0}
-        />
-      )}
-    </View>
+    <ChatInterface
+      chats={chats}
+      handleSearch={handleSearch}
+      isPending={modelThinking}
+      userInput={userInput}
+      userInputChange={setUserInput}
+      offline
+      ragState={ragActive}
+      setRagState={setRagActive}
+    />
   );
 };
 

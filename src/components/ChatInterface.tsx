@@ -151,7 +151,7 @@ const ChatInterface = ({
         <View>
           <BaseButton
             style={[
-              styles.ragSearchButton,
+              styles.absolueRagToggleButton,
               ragState ? styles.ragSearchActive : {},
             ]}
             text="Rag search"
@@ -247,6 +247,16 @@ const styles = StyleSheet.create({
     right: 10,
     width: SCREEN_WIDTH / 3,
     alignItems: "center",
+  },
+  absolueRagToggleButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 10 + SCREEN_WIDTH / 3 + 10,
+    width: SCREEN_WIDTH / 3,
+    alignItems: "center",
+    backgroundColor: COLORS.darkSecondary,
+    borderColor: COLORS.button,
+    borderWidth: 1,
   },
   userChatWrap: {
     backgroundColor: COLORS.darkTertiary,

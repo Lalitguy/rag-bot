@@ -40,42 +40,41 @@ export function useModelManager() {
   }, []);
 
   async function downloadModel(model: ModelType) {
-    const isAlreadyReady = models.find((m) => m.id === model.id)?.isReady;
-
-    if (isAlreadyReady) return;
-
     try {
-      if (model.downloadProgress === 0 && model.isReady === false) {
-        const llm = new ExecuTorchLLM({
-          modelSource: model.modelSource,
-          tokenizerSource: model.tokenizerSource,
-          tokenizerConfigSource: model.tokenizerConfigSource,
-          onDownloadProgress: (progress: number) => {
-            updateModels((prev) => {
-              return prev.map((m) => {
-                if (m.downloadProgress === 1 || progress === 1) {
-                  setReadyModels((prev) => [...prev, m]);
-                  const key = `model_ready_${m.id}`;
-                  AsyncStorage.getItem(key).then((val) => {
-                    if (!val) AsyncStorage.setItem(key, "true");
-                  });
-                }
-                return m.id === model.id
-                  ? {
-                      ...m,
-                      downloadProgress: progress,
-                      isReady: progress === 1,
-                    }
-                  : m;
-              });
+      const llm = new ExecuTorchLLM({
+        modelSource: model.modelSource,
+        tokenizerSource: model.tokenizerSource,
+        tokenizerConfigSource: model.tokenizerConfigSource,
+        onDownloadProgress: (progress: number) => {
+          updateModels((prev) => {
+            return prev.map((m) => {
+              if (m.downloadProgress === 1 || progress === 1) {
+                setReadyModels((prev) => {
+                  if (prev.some((model) => model.id === m.id)) {
+                    return prev; // Skip adding duplicate
+                  }
+                  return [...prev, m];
+                });
+                const key = `model_ready_${m.id}`;
+                AsyncStorage.getItem(key).then((val) => {
+                  if (!val) AsyncStorage.setItem(key, "true");
+                });
+              }
+              return m.id === model.id
+                ? {
+                    ...m,
+                    downloadProgress: progress,
+                    isReady: progress === 1,
+                  }
+                : m;
             });
-          },
-        });
-        setLLMs((prev) => ({
-          ...(prev ?? {}),
-          [model.id as keyof typeof llms]: llm,
-        }));
-      }
+          });
+        },
+      });
+      setLLMs((prev) => ({
+        ...(prev ?? {}),
+        [model.id as keyof typeof llms]: llm,
+      }));
     } catch (error) {
       console.error(`Error initializing model ${model.id}:`, error);
       return;

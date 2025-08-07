@@ -33,6 +33,7 @@ const OfflineModelNotice = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 12,
+    paddingHorizontal: 16,
   },
   message: {
     marginTop: 10,
