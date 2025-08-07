@@ -30,7 +30,7 @@ const KnowledgeBaseStack = () => {
         }}
       />
       <Stack.Screen
-        name="edit"
+        name="[id]"
         options={{
           title: "Edit knowledge ",
         }}

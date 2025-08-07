@@ -1,20 +1,39 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
-import Container from "@/src/components/common/Container";
-import BaseText from "@/src/components/common/BaseText";
-import BaseButton from "@/src/components/common/BaseButton";
-import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "@/src/constants/colors";
-import { Link, router } from "expo-router";
+import { useAllKnowledge } from "@/src/api/knowledge";
 import AddButton from "@/src/components/animated/AddButton";
+import KnowledgeListItem from "@/src/components/cards/KnowledgeListItem";
+import BaseText from "@/src/components/common/BaseText";
+import Container from "@/src/components/common/Container";
+import LoadingPage from "@/src/components/common/LoadingPage";
+import { useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
+import React from "react";
+import { FlatList, RefreshControl, StyleSheet } from "react-native";
 
 const KnowledgeList = () => {
+  const queryClient = useQueryClient();
   const handleRedirect = () => {
     router.push("/(rag-bot)/knowledge-base/add");
   };
+
+  const { data, isLoading, isFetching } = useAllKnowledge();
+
+  const { data: knowledgeList } = data || {};
+
+  if (isLoading) return <LoadingPage />;
+
   return (
-    <Container>
-      <BaseText text="Knowledge List" />
+    <Container noPadding>
+      <FlatList
+        data={knowledgeList}
+        renderItem={({ item }) => (
+          <KnowledgeListItem knowledge={item} key={item._id} />
+        )}
+        onRefresh={() =>
+          queryClient.invalidateQueries({ queryKey: ["knowledge"] })
+        }
+        refreshing={isFetching}
+        refreshControl={<RefreshControl refreshing={isFetching} />}
+      />
       <AddButton onPress={handleRedirect} />
     </Container>
   );

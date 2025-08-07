@@ -13,7 +13,7 @@ import BaseInput from "../common/BaseInput";
 import { defaultKnowledgeForm } from "@/src/constants/defaults";
 import { KnowledgeFormData } from "@/src/types";
 import { isValidUrl } from "@/src/utils";
-import { useKnowledgeAdd } from "@/src/api/knowledge";
+import { useKnowledgeAdd, useKnowledgeUpdate } from "@/src/api/knowledge";
 import useKeyboard from "@/src/hooks/useKeyboard";
 import { useIsFocused } from "@react-navigation/native";
 import { COLORS } from "@/src/constants/colors";
@@ -27,8 +27,12 @@ const placeholderTitles = [
   "e.g., Understanding API rate limits",
 ];
 
-const KnowledgeForm = () => {
-  const [form, setForm] = useState(defaultKnowledgeForm);
+interface Props {
+  formValues?: KnowledgeFormData;
+  updateId?: string;
+}
+const KnowledgeForm = ({ formValues, updateId }: Props) => {
+  const [form, setForm] = useState(formValues || defaultKnowledgeForm);
   const [formErrors, setFormErrors] = useState(defaultKnowledgeForm);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const { isKeyboardVisible } = useKeyboard();
@@ -40,6 +44,8 @@ const KnowledgeForm = () => {
   );
 
   const { mutate: insertKnowledge, isPending } = useKnowledgeAdd();
+  const { mutate: updateKnowledge, isPending: isUpdatePending } =
+    useKnowledgeUpdate();
 
   const handleChange = (val: string, key: keyof KnowledgeFormData) => {
     setForm((prev) => ({ ...prev, [key]: val }));
@@ -72,16 +78,21 @@ const KnowledgeForm = () => {
 
     if (hasError) return;
 
+    if (updateId) {
+      updateKnowledge({ data: form, id: updateId });
+      return;
+    }
+
     insertKnowledge(form);
   };
 
   useEffect(() => {
-    if (Object.entries(formErrors).every(([key, value]) => !value)) {
+    if (Object.entries(form).every(([_, value]) => !value)) {
       setButtonDisabled(true);
     }
   }, [form]);
 
-  const loading = isPending || buttonDisabled;
+  const loading = (updateId ? isUpdatePending : isPending) || buttonDisabled;
 
   return (
     <View style={STYLES.flex}>

@@ -46,9 +46,6 @@ const RagChat = ({ rag }: RagChatProps) => {
         const vecIds = await rag.splitAddDocument(docEntry.doc);
         newMap.set(docEntry.id, vecIds);
       }
-
-      setDocIdMap(newMap);
-      console.log(newMap);
     };
 
     if (isScreenFocused) {
@@ -73,7 +70,6 @@ const RagChat = ({ rag }: RagChatProps) => {
     );
     setModelThinking(false);
     setChats((prev) => [...prev, { role: "assistant", content: result }]);
-    console.log(result);
   };
 
   const isTopBarVisible = isKeyboardVisible && chats.length === 0;

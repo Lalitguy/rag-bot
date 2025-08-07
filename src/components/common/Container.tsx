@@ -1,6 +1,7 @@
 import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import React, { PropsWithChildren } from "react";
 import { COLORS } from "@/src/constants/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface ContainerProps {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ const Container = ({
   noPadding = false,
 }: ContainerProps) => {
   return (
-    <View
+    <SafeAreaView
       style={[
         styles.containerStyles,
         style,
@@ -24,7 +25,7 @@ const Container = ({
       ]}
     >
       {children}
-    </View>
+    </SafeAreaView>
   );
 };
 

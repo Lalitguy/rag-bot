@@ -47,7 +47,7 @@ interface KnowledgeFormData {
 }
 
 interface KnowledgeFormDataWithId extends KnowledgeFormData {
-  id: string;
+  _id: string;
 }
 
 interface ChatPrompt {
