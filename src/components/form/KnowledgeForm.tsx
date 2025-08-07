@@ -135,7 +135,15 @@ const KnowledgeForm = ({ formValues, updateId }: Props) => {
       </KeyboardAvoidingView>
       {!isKeyboardVisible && (
         <BaseButton
-          text="Submit"
+          text={
+            updateId
+              ? loading
+                ? "Updating..."
+                : "Update"
+              : loading
+              ? "Saving..."
+              : "Save"
+          }
           style={styles.buttonStyles}
           textStyle={STYLES.textBold}
           onPress={handleSubmit}
