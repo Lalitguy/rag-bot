@@ -60,4 +60,10 @@ export const STYLES = StyleSheet.create({
   gap12: {
     gap: 12,
   },
+  textBtnColor: {
+    color: COLORS.button,
+  },
+  paddingHorizontal6: {
+    paddingHorizontal: 6,
+  },
 });

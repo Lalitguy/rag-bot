@@ -19,6 +19,9 @@ interface Props {
   isPending: boolean;
   userInput: string;
   userInputChange: (text: string) => void;
+  offline?: boolean;
+  ragState?: boolean;
+  setRagState?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const ChatInterface = ({
   handleSearch,
@@ -26,8 +29,12 @@ const ChatInterface = ({
   chats,
   userInput,
   userInputChange,
+  offline,
+  ragState,
+  setRagState,
 }: Props) => {
   const { isKeyboardVisible } = useKeyboard();
+  const scrollViewRef = React.useRef<ScrollView>(null);
 
   const isTopBarVisible = isKeyboardVisible && chats.length === 0;
 
@@ -36,7 +43,11 @@ const ChatInterface = ({
       {chats.length === 0 && !isKeyboardVisible && (
         <View style={styles.textWrap}>
           <BaseText
-            text="Hi there! I'm your Offline Assistant, here to help you out anytime — no internet needed."
+            text={
+              offline
+                ? "Hi there! I'm your Offline Assistant, here to help you out anytime — no internet needed."
+                : "Hi there! I'm your AI Assistant, here to help you out anytime."
+            }
             style={[styles.assistantText, STYLES.mBottom10]}
           />
           <BaseText
@@ -55,7 +66,14 @@ const ChatInterface = ({
           />
         </View>
       )}
-      <ScrollView keyboardDismissMode="none">
+      <ScrollView
+        keyboardDismissMode="none"
+        ref={scrollViewRef}
+        onContentSizeChange={() => {
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+        }}
+        style={styles.scrollWrap}
+      >
         {chats.map((item, index) => (
           <View
             key={index}
@@ -84,6 +102,7 @@ const ChatInterface = ({
             <BaseText text="Thinking..." />
           </View>
         )}
+        <View style={styles.bottomSpace} />
       </ScrollView>
       <View
         style={[
@@ -94,30 +113,62 @@ const ChatInterface = ({
       >
         <BaseInput
           placeholder="Ask me anything, I'm here to help! "
-          numberOfLines={4}
+          numberOfLines={isTopBarVisible ? 4 : 2}
           style={styles.inputStyle}
           value={userInput}
           onChangeText={(text) => userInputChange(text)}
         />
         {!isTopBarVisible && (
-          <BaseButton
-            style={styles.buttonStyle}
-            customComponent={
-              <AntDesign name="arrowup" size={24} color="black" />
-            }
-            onPress={handleSearch}
-            disabled={modelThinking || userInput.length === 0}
-          />
+          <View
+            style={[
+              STYLES.flexRow,
+              STYLES.justifyEnd,
+              STYLES.gap12,
+              STYLES.paddingHorizontal6,
+            ]}
+          >
+            <BaseButton
+              style={[
+                styles.ragSearchButton,
+                ragState ? styles.ragSearchActive : {},
+              ]}
+              text="Rag search"
+              textStyle={[ragState ? STYLES.textSemiBold : STYLES.textBtnColor]}
+              onPress={() => setRagState?.((prev) => !prev)}
+            />
+            <BaseButton
+              style={styles.buttonStyle}
+              customComponent={
+                <AntDesign name="arrowup" size={24} color="black" />
+              }
+              onPress={handleSearch}
+              disabled={modelThinking || userInput.length === 0}
+            />
+          </View>
         )}
       </View>
       {isTopBarVisible && (
-        <BaseButton
-          style={styles.absoluteSearchButton}
-          text="Search"
-          customComponent={<AntDesign name="arrowup" size={24} color="black" />}
-          onPress={handleSearch}
-          disabled={modelThinking || userInput.length === 0}
-        />
+        <View>
+          <BaseButton
+            style={[
+              styles.ragSearchButton,
+              ragState ? styles.ragSearchActive : {},
+            ]}
+            text="Rag search"
+            textStyle={[ragState ? STYLES.textSemiBold : STYLES.textBtnColor]}
+            onPress={() => setRagState?.((prev) => !prev)}
+          />
+          <BaseButton
+            style={styles.absoluteSearchButton}
+            text="Search"
+            customComponent={
+              <AntDesign name="arrowup" size={20} color="black" />
+            }
+            onPress={handleSearch}
+            disabled={modelThinking || userInput.length === 0}
+            textStyle={STYLES.textSemiBold}
+          />
+        </View>
       )}
     </View>
   );
@@ -151,6 +202,13 @@ const styles = StyleSheet.create({
     left: 0,
     width: SCREEN_WIDTH,
   },
+  scrollWrap: {
+    flex: 1,
+    marginBottom: 80,
+  },
+  bottomSpace: {
+    height: 50,
+  },
   assistantText: {
     fontFamily: "Fk-Grotesk",
     fontSize: 22,
@@ -169,6 +227,19 @@ const styles = StyleSheet.create({
     marginRight: 8,
     marginBottom: 8,
     alignSelf: "flex-end",
+  },
+  ragSearchButton: {
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 0,
+    width: "auto",
+    backgroundColor: COLORS.darkTertiary,
+    borderColor: COLORS.button,
+    borderWidth: 1,
+  },
+  ragSearchActive: {
+    backgroundColor: COLORS.button,
   },
   absoluteSearchButton: {
     position: "absolute",

@@ -1,17 +1,16 @@
 import { useChatPrompt } from "@/src/api/chat";
 import ChatInterface from "@/src/components/ChatInterface";
 import Container from "@/src/components/common/Container";
-import { COLORS } from "@/src/constants/colors";
 import { STYLES } from "@/src/constants/styles";
 import { ChatListItem } from "@/src/types";
 import React, { useRef, useState } from "react";
-import { Dimensions, Keyboard, ScrollView, StyleSheet } from "react-native";
+import { Keyboard, ScrollView } from "react-native";
 
-const SCREEN_WIDTH = Dimensions.get("screen").width;
 const RagBot = () => {
   const { mutate: promptSearch, isPending } = useChatPrompt();
   const [inputText, setInputText] = useState("");
   const scrollViewRef = useRef<ScrollView>(null);
+  const [ragActive, setRagActive] = useState(true);
 
   const [chatList, setChatList] = useState<ChatListItem[]>([]);
 
@@ -26,6 +25,7 @@ const RagBot = () => {
 
       const promptData = {
         prompt: inputText,
+        rag: ragActive,
       };
       setInputText("");
       promptSearch(promptData, {
@@ -47,6 +47,8 @@ const RagBot = () => {
         isPending={isPending}
         userInputChange={handleTextChange}
         userInput={inputText}
+        ragState={ragActive}
+        setRagState={setRagActive}
       />
     </Container>
   );

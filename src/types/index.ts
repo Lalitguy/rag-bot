@@ -52,6 +52,7 @@ interface KnowledgeFormDataWithId extends KnowledgeFormData {
 
 interface ChatPrompt {
   prompt: string;
+  rag?: boolean;
 }
 
 interface ChatListItem {
