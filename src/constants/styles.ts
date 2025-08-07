@@ -57,4 +57,7 @@ export const STYLES = StyleSheet.create({
   bgTertiary: {
     backgroundColor: COLORS.darkSecondary,
   },
+  gap12: {
+    gap: 12,
+  },
 });

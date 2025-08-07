@@ -6,10 +6,20 @@ interface BaseTextProps {
   text: string;
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;
+  selectable?: boolean;
 }
-const BaseText = ({ text, style, numberOfLines }: BaseTextProps) => {
+const BaseText = ({
+  text,
+  style,
+  numberOfLines,
+  selectable,
+}: BaseTextProps) => {
   return (
-    <Text style={[styles.baseStyles, style]} numberOfLines={numberOfLines}>
+    <Text
+      style={[styles.baseStyles, style]}
+      numberOfLines={numberOfLines}
+      selectable={selectable}
+    >
       {text}
     </Text>
   );

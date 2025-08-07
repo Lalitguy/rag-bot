@@ -22,7 +22,6 @@ const TabLayout = () => {
         tabBarActiveTintColor: COLORS.button,
         tabBarInactiveTintColor: COLORS.lightGray,
         tabBarHideOnKeyboard: true,
-        headerShown: false,
       }}
     >
       <Tabs.Screen

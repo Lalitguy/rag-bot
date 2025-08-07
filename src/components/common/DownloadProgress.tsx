@@ -1,7 +1,8 @@
 import { COLORS } from "@/src/constants/colors";
 import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, Animated } from "react-native";
+import { View, Text, StyleSheet, Animated, Dimensions } from "react-native";
 import BaseText from "./BaseText";
+import { STYLES } from "@/src/constants/styles";
 
 const DownloadProgress = ({
   progress,
@@ -27,37 +28,38 @@ const DownloadProgress = ({
   return (
     <View style={styles.container}>
       {text && <BaseText text={text} />}
-      <View style={styles.track}>
-        <Animated.View
-          style={[
-            styles.fill,
-            {
-              width: animatedWidth.interpolate({
-                inputRange: [0, 1],
-                outputRange: ["0%", "100%"],
-              }),
-            },
-          ]}
-        />
+      <View style={[STYLES.flexRow, STYLES.itemsCenter, STYLES.gap12]}>
+        <View style={styles.track}>
+          <Animated.View
+            style={[
+              styles.fill,
+              {
+                width: animatedWidth.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ["0%", "100%"],
+                }),
+              },
+            ]}
+          />
+        </View>
+        <BaseText style={styles.percentage} text={`${percentage}%`} />
       </View>
-      <BaseText style={styles.percentage} text={`${percentage}%`} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
+    flexDirection: "column",
+    gap: 4,
     padding: 12,
   },
   track: {
-    flex: 1,
     height: 6,
     backgroundColor: COLORS.lightGray,
     borderRadius: 3,
     overflow: "hidden",
+    flex: 1,
   },
   fill: {
     height: "100%",
