@@ -34,7 +34,6 @@ interface Props {
 const KnowledgeForm = ({ formValues, updateId }: Props) => {
   const [form, setForm] = useState(formValues || defaultKnowledgeForm);
   const [formErrors, setFormErrors] = useState(defaultKnowledgeForm);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const { isKeyboardVisible } = useKeyboard();
   const isScreenFocused = useIsFocused();
   const placeholder = useMemo(
@@ -86,11 +85,7 @@ const KnowledgeForm = ({ formValues, updateId }: Props) => {
     insertKnowledge(form);
   };
 
-  useEffect(() => {
-    if (Object.entries(form).every(([_, value]) => !value)) {
-      setButtonDisabled(true);
-    }
-  }, [form]);
+  const buttonDisabled = Object.entries(form).every(([_, value]) => !value);
 
   const loading = (updateId ? isUpdatePending : isPending) || buttonDisabled;
 
@@ -137,10 +132,10 @@ const KnowledgeForm = ({ formValues, updateId }: Props) => {
         <BaseButton
           text={
             updateId
-              ? loading
+              ? isUpdatePending
                 ? "Updating..."
                 : "Update"
-              : loading
+              : isPending
               ? "Saving..."
               : "Save"
           }
